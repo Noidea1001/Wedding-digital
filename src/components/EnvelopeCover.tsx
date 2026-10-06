@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Sparkles, Heart, Music2 } from 'lucide-react';
+import { Heart, Music2 } from 'lucide-react';
 import { ThemeConfig } from '@/lib/themes';
 import { SupportedLocale, DICTIONARIES } from '@/lib/i18n';
-import { KbachCorner, SweetFloatingPetals } from './KhmerOrnaments';
+import { SweetFloatingPetals } from './KhmerOrnaments';
 
 interface EnvelopeCoverProps {
   locale: SupportedLocale;
@@ -32,213 +32,347 @@ export default function EnvelopeCover({
   onOpenInvitation
 }: EnvelopeCoverProps) {
   const [isOpening, setIsOpening] = useState(false);
-  const [isOpened, setIsOpened] = useState(false);
 
   const isKhmer = locale === 'km';
   const t = DICTIONARIES[locale] || DICTIONARIES.km;
 
   const handleOpen = () => {
-    if (isOpening || isOpened) return;
+    if (isOpening) return;
     setIsOpening(true);
 
-    // 1. Royal golden & rose confetti burst
     try {
       confetti({
-        particleCount: 80,
-        spread: 90,
-        origin: { y: 0.6 },
-        colors: ['#D4AF37', '#FCF6BA', '#AA771C', '#FFFFFF', '#F472B6', '#FB7185']
+        particleCount: 90,
+        spread: 100,
+        origin: { y: 0.55 },
+        colors: ['#D4AF37', '#FCF6BA', '#FFFFFF', '#FBCFE8', '#F472B6'],
+        gravity: 0.8,
+        scalar: 0.9,
       });
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
 
-    // 2. Second burst for layered luxury feel
     setTimeout(() => {
       try {
         confetti({
           particleCount: 60,
-          spread: 120,
-          origin: { y: 0.45 },
-          colors: ['#D4AF37', '#FFE082', '#E2849D', '#FFFFFF']
+          spread: 140,
+          origin: { y: 0.4 },
+          colors: ['#D4AF37', '#FFE082', '#E2849D', '#FFFFFF'],
+          gravity: 0.7,
+          scalar: 1.1,
         });
-      } catch {
-        // ignore
-      }
-    }, 300);
+      } catch { /* ignore */ }
+    }, 350);
 
-    // 3. Smooth transition to invitation view
     setTimeout(() => {
-      setIsOpened(true);
       onOpenInvitation();
-    }, 1100);
+    }, 950);
   };
-
-  if (isOpened) return null;
 
   return (
     <AnimatePresence>
       <motion.div
+        key="cover"
         initial={{ opacity: 1 }}
-        animate={isOpening ? { opacity: 0, scale: 1.06, y: -30 } : { opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 1.08 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto select-none bg-gradient-to-b from-[#2E0916] via-[#1B050D] to-[#0D0206]"
+        animate={isOpening ? { opacity: 0, scale: 1.04, y: -24 } : { opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto"
+        style={{
+          background: 'linear-gradient(155deg, #1A0A1E 0%, #2D0B1F 30%, #1B050D 60%, #0D0308 100%)',
+        }}
       >
-        {/* Deep Romantic Warm Glow Rays */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/20 via-rose-950/40 to-transparent pointer-events-none -z-10" />
+        {/* Ambient bokeh orbs */}
+        <div className="absolute top-[-5%] left-[-5%] w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #D4AF37 0%, transparent 70%)' }} />
+        <div className="absolute bottom-[-5%] right-[-5%] w-80 h-80 rounded-full opacity-15 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #F472B6 0%, transparent 70%)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 blur-[80px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #AA771C 0%, transparent 65%)' }} />
 
-        {/* Ambient Warm Golden Stardust Orbs */}
-        <div className="absolute top-1/4 left-1/12 w-80 h-80 rounded-full bg-amber-400/15 blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/12 w-96 h-96 rounded-full bg-rose-500/15 blur-3xl pointer-events-none animate-pulse delay-1000" />
-
-        {/* Romantic Sweet Floating Lotus Petals */}
+        {/* Falling petals */}
         <SweetFloatingPetals />
 
-        {/* MAIN LUXURY INVITATION PRESENTATION FOLIO */}
-        <div className="relative w-full max-w-[430px] my-auto">
-          
-          {/* Card Body with Multi-layered Drop Shadow */}
-          <div className="relative rounded-[36px] bg-[#FFFDF9] border-2 border-amber-300/90 shadow-[0_30px_90px_rgba(212,175,55,0.45)] p-6 sm:p-8 text-center flex flex-col items-center overflow-hidden">
-            
-            {/* 4 Traditional Cambodian Kbach Corner Filigree */}
-            <KbachCorner position="top-left" />
-            <KbachCorner position="top-right" />
-            <KbachCorner position="bottom-left" />
-            <KbachCorner position="bottom-right" />
+        {/* ===== CARD ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 32, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="relative w-full max-w-[390px] mx-auto my-auto px-4 py-6 sm:py-8 select-none"
+        >
+          {/* Card body */}
+          <div className="relative rounded-[32px] overflow-hidden text-center"
+            style={{
+              background: 'linear-gradient(160deg, #FFFDF8 0%, #FFF8EC 50%, #FFFBF2 100%)',
+              boxShadow: '0 40px 100px -20px rgba(140,90,10,0.45), 0 0 0 1.5px rgba(212,175,55,0.5)',
+            }}
+          >
+            {/* Top decorative arch band */}
+            <div className="h-2 w-full"
+              style={{ background: 'linear-gradient(90deg, #AA771C 0%, #FCF6BA 30%, #D4AF37 50%, #FCF6BA 70%, #AA771C 100%)' }} />
 
-            {/* Subtle Royal Damask Watermark Pattern */}
-            <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#AA771C_1.5px,transparent_1.5px)] [background-size:18px_18px] pointer-events-none" />
+            {/* Corner ornaments */}
+            <CornerFlourish position="top-left" />
+            <CornerFlourish position="top-right" />
+            <CornerFlourish position="bottom-left" />
+            <CornerFlourish position="bottom-right" />
 
-            {/* 1. TOP ROYAL LOTUS MEDALLION & AUSPICIOUS BLESSING */}
-            <div className="flex flex-col items-center pt-1 mb-2">
-              <div className="w-12 h-12 rounded-full gold-foil-bg text-amber-950 flex items-center justify-center shadow-lg shadow-amber-900/30 border-2 border-yellow-200 mb-2">
-                <svg className="w-7 h-7 fill-amber-950 drop-shadow-xs" viewBox="0 0 24 24">
-                  <path d="M12 2C12 2 13.5 6 15 8C16.5 10 19 11 19 13C19 15.5 17 18 12 20C7 18 5 15.5 5 13C5 11 7.5 10 9 8C10.5 6 12 2 12 2Z" />
-                  <path d="M12 7C12.8 9.5 14.5 11.5 16.5 12.5C14.5 13.5 13 15 12 17C11 15 9.5 13.5 7.5 12.5C9.5 11.5 11.2 9.5 12 7Z" opacity="0.4" fill="#FFF" />
+            {/* ─── Content Area ─── */}
+            <div className="px-6 pt-6 pb-8 flex flex-col items-center gap-5">
+
+              {/* 1. Blessing badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(255,253,240,0.95) 100%)',
+                  borderColor: 'rgba(212,175,55,0.5)',
+                  boxShadow: '0 2px 10px rgba(212,175,55,0.15)',
+                }}
+              >
+                {/* Lotus icon */}
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 3C12 3 14 8 16.5 10C19 12 21 13 21 15.5C21 18.5 18 21 12 22C6 21 3 18.5 3 15.5C3 13 5 12 7.5 10C10 8 12 3 12 3Z"
+                    fill="url(#lotusGold)" />
+                  <path d="M12 8C12.5 11 14.5 13 17 14.5C14.5 16 13 18 12 20C11 18 9.5 16 7 14.5C9.5 13 11.5 11 12 8Z"
+                    fill="rgba(255,255,255,0.5)" />
+                  <defs>
+                    <linearGradient id="lotusGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#D4AF37" />
+                      <stop offset="100%" stopColor="#AA771C" />
+                    </linearGradient>
+                  </defs>
                 </svg>
-              </div>
-
-              <span className={`text-xs uppercase tracking-widest gold-foil-text font-bold ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-                {isKhmer ? 'សិរីសួស្តី ជ័យមង្គល វិបុលសុខ' : 'LOVE & AUSPICIOUS HARMONY'}
-              </span>
-
-              <h2 className={`text-xl sm:text-2xl text-amber-950 tracking-wide mt-1 ${isKhmer ? 'font-khmer-moul' : 'font-playfair font-bold'}`}>
-                {isKhmer ? 'លិខិតអញ្ជើញ អាពាហ៍ពិពាហ៍' : 'Royal Wedding Invitation'}
-              </h2>
-            </div>
-
-            {/* 2. ROMANTIC COUPLE FRAMED LOCKET PORTRAIT */}
-            <div className="relative my-3 w-36 h-36 sm:w-44 sm:h-44 rounded-full p-2 border-3 border-amber-300 shadow-xl bg-gradient-to-tr from-amber-200 via-white to-amber-200 group">
-              <div className="w-full h-full rounded-full overflow-hidden relative shadow-inner">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={coverPhotoUrl}
-                  alt="Couple Pre-wedding"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
-              </div>
-
-              {/* Decorative Little Heart Badge */}
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full gold-foil-bg text-amber-950 flex items-center justify-center shadow-md border-2 border-white">
-                <Heart className="w-4 h-4 fill-current text-amber-950" />
-              </div>
-            </div>
-
-            {/* 3. COUPLE TYPOGRAPHY */}
-            <div className="my-2 w-full">
-              <p className={`text-[11px] uppercase tracking-wider text-amber-800/80 font-bold mb-1 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-                {isKhmer ? 'កូនប្រុស និង កូនស្រី' : 'The Groom & The Bride'}
-              </p>
-              <h1 className={`text-2xl sm:text-3xl text-slate-900 tracking-wide leading-tight ${isKhmer ? 'font-khmer-koulen' : 'font-playfair font-bold'}`}>
-                {groomName}
-              </h1>
-              <div className="flex items-center justify-center gap-3 my-1">
-                <div className="h-[1.5px] w-12 bg-gradient-to-r from-transparent to-amber-400" />
-                <span className="gold-foil-text font-serif italic text-2xl font-bold">&</span>
-                <div className="h-[1.5px] w-12 bg-gradient-to-l from-transparent to-amber-400" />
-              </div>
-              <h1 className={`text-2xl sm:text-3xl text-slate-900 tracking-wide leading-tight ${isKhmer ? 'font-khmer-koulen' : 'font-playfair font-bold'}`}>
-                {brideName}
-              </h1>
-
-              {/* Auspicious Date Ribbon */}
-              <div className="inline-block mt-3 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-300 text-amber-950 text-xs font-bold shadow-xs">
-                {weddingDateFormatted}
-              </div>
-            </div>
-
-            {/* 4. PERSONALIZED VIP HONORED GUEST PLAQUE */}
-            <div className="w-full my-3 p-4 rounded-2xl bg-gradient-to-b from-amber-50/70 via-white to-amber-50/70 border border-amber-300/90 shadow-sm backdrop-blur-md text-center relative">
-              <div className="flex items-center justify-center gap-1.5 text-slate-600 text-[11px] font-bold mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span className={isKhmer ? 'font-khmer' : 'font-sans'}>{t.invitedGreeting}</span>
-              </div>
-              <h3 className={`text-lg sm:text-xl font-bold text-slate-900 mt-1 ${isKhmer ? 'font-khmer-koulen' : 'font-playfair'}`}>
-                {guestName}
-              </h3>
-              {guestGroup && (
-                <span className="inline-block mt-1 text-[10px] font-bold px-3 py-0.5 rounded-full gold-foil-bg text-amber-950 shadow-xs">
-                  {guestGroup}
+                <span className={`text-xs font-bold tracking-wide`}
+                  style={{ color: '#8B6914', fontFamily: isKhmer ? 'Koulen, cursive' : 'inherit' }}>
+                  {isKhmer ? 'ជ័យមង្គល ✦ វិបុលសុខ' : 'LOVE & AUSPICIOUS BLESSINGS'}
                 </span>
-              )}
-              <p className={`text-[10px] text-slate-400 mt-2 italic ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-                {t.apologyNotice}
-              </p>
-            </div>
+              </motion.div>
 
-            {/* 5. ROYAL SATIN RIBBON WITH 3D WAX SEAL & OPEN ACTION */}
-            <div className="w-full mt-3 flex flex-col items-center relative">
-              
-              {/* Horizontal Satin Ribbon bar */}
-              <div className="w-full h-3 gold-ribbon-satin rounded-full my-1 relative flex items-center justify-center">
-                {/* 3D Royal Wax Seal Button sitting on the ribbon */}
+              {/* 2. Couple photo */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                className="relative"
+              >
+                {/* Outer glow ring */}
+                <div className="absolute inset-[-6px] rounded-full animate-glow-pulse opacity-70"
+                  style={{ background: 'linear-gradient(135deg, #D4AF37, #FCF6BA, #AA771C)' }} />
+                {/* Photo frame */}
+                <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-[3px] border-white shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={coverPhotoUrl}
+                    alt="Couple"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+                </div>
+                {/* Heart badge */}
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full border-2 border-white flex items-center justify-center shadow-md animate-heartbeat"
+                  style={{ background: 'linear-gradient(135deg, #D4AF37, #AA771C)' }}>
+                  <Heart className="w-3.5 h-3.5 fill-white text-white" />
+                </div>
+              </motion.div>
+
+              {/* 3. Couple names */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.55 }}
+                className="w-full"
+              >
+                <p className="text-[10px] uppercase tracking-[0.2em] font-bold mb-2"
+                  style={{ color: '#9B7920', fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+                  {isKhmer ? 'កូនប្រុស & កូនស្រី' : 'Groom & Bride'}
+                </p>
+
+                <h1 className={`leading-tight text-[#1C1008]`}
+                  style={{
+                    fontSize: 'clamp(1.5rem, 5vw, 1.875rem)',
+                    fontFamily: isKhmer ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+                    fontWeight: isKhmer ? 400 : 700,
+                    letterSpacing: isKhmer ? '0.02em' : '-0.01em',
+                  }}>
+                  {groomName}
+                </h1>
+
+                {/* Ampersand divider */}
+                <div className="flex items-center justify-center gap-3 my-1.5">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/60" />
+                  <span className="text-2xl font-bold italic" style={{
+                    fontFamily: 'Georgia, serif',
+                    background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #AA771C)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}>
+                    &amp;
+                  </span>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/60" />
+                </div>
+
+                <h1 className={`leading-tight text-[#1C1008]`}
+                  style={{
+                    fontSize: 'clamp(1.5rem, 5vw, 1.875rem)',
+                    fontFamily: isKhmer ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+                    fontWeight: isKhmer ? 400 : 700,
+                    letterSpacing: isKhmer ? '0.02em' : '-0.01em',
+                  }}>
+                  {brideName}
+                </h1>
+
+                {/* Wedding date pill */}
+                <div className="inline-flex items-center gap-1.5 mt-3 px-4 py-1.5 rounded-full"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(212,175,55,0.12), rgba(255,248,220,0.9))',
+                    border: '1px solid rgba(212,175,55,0.45)',
+                  }}>
+                  <svg className="w-3 h-3 text-amber-600 shrink-0" viewBox="0 0 16 16" fill="currentColor">
+                    <rect x="1" y="3" width="14" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M1 7h14" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M5 1v4M11 1v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                  <span className="text-[11px] font-bold text-amber-950"
+                    style={{ fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+                    {weddingDateFormatted}
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Thin gold divider */}
+              <div className="w-full flex items-center gap-2">
+                <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(212,175,55,0.5))' }} />
+                <svg className="w-5 h-5 shrink-0" viewBox="0 0 20 20" fill="none">
+                  <circle cx="10" cy="10" r="3" fill="#D4AF37" />
+                  <circle cx="10" cy="10" r="6" stroke="#D4AF37" strokeWidth="0.8" strokeOpacity="0.5" fill="none"/>
+                  <circle cx="10" cy="10" r="9" stroke="#D4AF37" strokeWidth="0.5" strokeOpacity="0.3" fill="none"/>
+                </svg>
+                <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, rgba(212,175,55,0.5))' }} />
+              </div>
+
+              {/* 4. Guest card */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="w-full rounded-2xl p-4 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(255,248,230,0.8) 0%, rgba(255,253,246,0.95) 100%)',
+                  border: '1px solid rgba(212,175,55,0.35)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9)',
+                }}
+              >
+                <p className="text-[10px] uppercase tracking-[0.18em] font-bold mb-1"
+                  style={{ color: '#9B7920', fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+                  {t.invitedGreeting}
+                </p>
+                <p className="font-bold text-slate-900"
+                  style={{
+                    fontSize: 'clamp(1rem, 3.5vw, 1.25rem)',
+                    fontFamily: isKhmer ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+                    lineHeight: 1.3,
+                  }}>
+                  {guestName}
+                </p>
+                {guestGroup && (
+                  <span className="inline-block mt-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold text-amber-950"
+                    style={{ background: 'linear-gradient(135deg, #D4AF37, #FCF6BA)' }}>
+                    {guestGroup}
+                  </span>
+                )}
+              </motion.div>
+
+              {/* 5. CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.75, duration: 0.5 }}
+                className="w-full"
+              >
                 <button
                   onClick={handleOpen}
                   disabled={isOpening}
-                  className="w-16 h-16 rounded-full wax-seal-luxury text-amber-950 flex flex-col items-center justify-center border-2 border-yellow-100 shadow-xl hover:scale-108 active:scale-95 transition-all duration-300 cursor-pointer animate-pulse-gold group"
-                  title={t.openInvitation}
-                  aria-label={t.openInvitation}
+                  className="w-full relative overflow-hidden flex items-center justify-center gap-3 rounded-2xl font-bold transition-all duration-300 cursor-pointer disabled:opacity-60"
+                  style={{
+                    minHeight: '52px',
+                    background: 'linear-gradient(135deg, #C9A227 0%, #E8CF6A 40%, #B38728 70%, #D4AF37 100%)',
+                    color: '#3D2400',
+                    border: '1px solid rgba(255,235,150,0.5)',
+                    boxShadow: '0 1px 0 rgba(255,255,255,0.4) inset, 0 8px 24px -4px rgba(180,130,20,0.5)',
+                    fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
+                  }}
                 >
-                  <svg className="w-8 h-8 fill-amber-950 group-hover:rotate-12 transition-transform duration-300 drop-shadow-xs" viewBox="0 0 24 24">
-                    <path d="M12 2C12 2 13.5 6 15 8C16.5 10 19 11 19 13C19 15.5 17 18 12 20C7 18 5 15.5 5 13C5 11 7.5 10 9 8C10.5 6 12 2 12 2Z" />
-                    <path d="M12 7C12.8 9.5 14.5 11.5 16.5 12.5C14.5 13.5 13 15 12 17C11 15 9.5 13.5 7.5 12.5C9.5 11.5 11.2 9.5 12 7Z" opacity="0.4" fill="#FFF" />
+                  {/* Shimmer */}
+                  <div className="absolute inset-0 w-1/3 bg-white/30 blur-sm pointer-events-none animate-shimmer-sweep" />
+
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" />
                   </svg>
-                  <span className={`text-[7px] font-bold uppercase tracking-wider text-amber-950 -mt-0.5 ${isKhmer ? 'font-khmer-moul' : 'font-sans'}`}>
-                    {isKhmer ? 'សិរីមង្គល' : 'ROYAL'}
+                  <span style={{ fontFamily: isKhmer ? 'Koulen, cursive' : 'inherit', letterSpacing: isKhmer ? '0.04em' : '0.02em' }}>
+                    {t.openInvitation}
                   </span>
+                  <Heart className="w-4 h-4 fill-current shrink-0" />
                 </button>
-              </div>
 
-              {/* Grand Glowing Call-to-Action Button */}
-              <button
-                onClick={handleOpen}
-                disabled={isOpening}
-                className="w-full mt-8 group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl gold-foil-bg text-amber-950 font-bold text-sm sm:text-base shadow-xl shadow-amber-900/35 hover:shadow-amber-900/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-yellow-200 cursor-pointer"
-              >
-                {/* Internal Shimmer Sweep Reflection */}
-                <div className="absolute inset-0 w-1/3 bg-white/40 blur-sm pointer-events-none animate-shimmer-sweep" />
+                {/* Music hint */}
+                <div className="flex items-center justify-center gap-1.5 mt-2.5">
+                  <Music2 className="w-3 h-3 text-amber-700 animate-pulse" />
+                  <span className="text-[10px] font-semibold text-amber-800/70"
+                    style={{ fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+                    {t.clickToOpen}
+                  </span>
+                </div>
+              </motion.div>
 
-                <Sparkles className="w-4 h-4 text-amber-950 group-hover:rotate-12 transition-transform shrink-0" />
-                <span className={`tracking-wider ${isKhmer ? 'font-khmer-koulen text-lg' : 'font-sans font-bold'}`}>
-                  {t.openInvitation}
-                </span>
-                <Heart className="w-4 h-4 text-amber-950 fill-amber-950 group-hover:scale-125 transition-transform shrink-0" />
-              </button>
-
-              {/* Audio & Opening Hint */}
-              <div className="flex items-center gap-1.5 text-xs text-amber-900/80 mt-2">
-                <Music2 className="w-3.5 h-3.5 text-amber-700 animate-pulse" />
-                <span className={`text-[11px] font-semibold ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-                  {t.clickToOpen}
-                </span>
-              </div>
             </div>
 
+            {/* Bottom decorative band */}
+            <div className="h-2 w-full"
+              style={{ background: 'linear-gradient(90deg, #AA771C 0%, #FCF6BA 30%, #D4AF37 50%, #FCF6BA 70%, #AA771C 100%)' }} />
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+/* ─── Corner Flourish SVG ─── */
+function CornerFlourish({ position }: { position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' }) {
+  const transforms: Record<string, string> = {
+    'top-left':     'top-3 left-3',
+    'top-right':    'top-3 right-3 rotate-90',
+    'bottom-left':  'bottom-3 left-3 -rotate-90',
+    'bottom-right': 'bottom-3 right-3 rotate-180',
+  };
+
+  return (
+    <svg
+      className={`absolute w-9 h-9 pointer-events-none ${transforms[position]}`}
+      viewBox="0 0 36 36"
+      fill="none"
+    >
+      {/* Outer L-frame */}
+      <path d="M 2 34 L 2 10 Q 2 2 10 2 L 34 2"
+        stroke="url(#cornerGold)" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      {/* Inner L-frame */}
+      <path d="M 6 30 L 6 12 Q 6 6 12 6 L 30 6"
+        stroke="url(#cornerGold)" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.55" fill="none" />
+      {/* Corner node lotus */}
+      <circle cx="10" cy="10" r="2.5" fill="#D4AF37" />
+      <circle cx="2"  cy="2"  r="1.5" fill="#F5C842" />
+      {/* Wing dots */}
+      <circle cx="20" cy="6" r="1.2" fill="#D4AF37" fillOpacity="0.7" />
+      <circle cx="6"  cy="20" r="1.2" fill="#D4AF37" fillOpacity="0.7" />
+      <defs>
+        <linearGradient id="cornerGold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D4AF37" />
+          <stop offset="100%" stopColor="#AA771C" />
+        </linearGradient>
+      </defs>
+    </svg>
   );
 }

@@ -32,13 +32,31 @@ export default function EventsSection({
   return (
     <section id="events" className="py-16 sm:py-24 px-4 max-w-5xl mx-auto scroll-mt-12">
       <div className="text-center mb-14">
-        <h2 className={`text-2xl sm:text-3xl text-amber-950 mb-2 ${isKhmer ? 'font-khmer-moul' : 'font-playfair font-bold'}`}>
+        <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-2"
+          style={{ color: '#9B7920', fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+          {isKhmer ? 'កាលវិភាគកម្មវិធី' : 'Order of Events'}
+        </p>
+        <h2
+          style={{
+            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+            lineHeight: 1.2,
+            fontFamily: isKhmer ? 'Moul, cursive' : 'var(--font-playfair), Georgia, serif',
+            fontWeight: isKhmer ? 400 : 700,
+            color: '#4A2800',
+            letterSpacing: isKhmer ? '0.02em' : '-0.01em',
+          }}
+        >
           {t.eventsSchedule}
         </h2>
-        <span className={`text-xs uppercase tracking-[0.25em] font-bold text-amber-800/70 block mb-3 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-          {isKhmer ? 'កាលវិភាគកម្មវិធីមង្គលការ' : 'Order of Auspicious Events'}
-        </span>
-        <p className={`text-xs sm:text-sm text-slate-600 max-w-lg mx-auto ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+        <div className="w-12 h-0.5 mx-auto rounded-full mt-3 mb-3" style={{ background: 'linear-gradient(90deg, #BF953F, #FCF6BA, #AA771C)' }} />
+        <p
+          className="text-slate-600 max-w-lg mx-auto"
+          style={{
+            fontSize: 'clamp(0.8125rem, 2vw, 0.9375rem)',
+            fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit',
+            lineHeight: isKhmer ? 1.85 : 1.65,
+          }}
+        >
           {t.scheduleDesc}
         </p>
       </div>

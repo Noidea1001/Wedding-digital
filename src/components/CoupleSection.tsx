@@ -52,28 +52,63 @@ export default function CoupleSection({
 
   return (
     <section id="couple" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto text-center scroll-mt-12">
-      {/* Traditional Auspicious Quote Card */}
-      <div className={`p-6 sm:p-8 rounded-[32px] ${themeConfig.cardBg} mb-14 max-w-2xl mx-auto shadow-md border-2 border-amber-300/80 relative`}>
+
+      {/* Section heading */}
+      <div className="mb-12">
+        <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-2"
+          style={{ color: '#9B7920', fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}>
+          {isKhmer ? 'កូនប្រុស & កូនស្រី' : 'The Newlyweds'}
+        </p>
+        <h2
+          style={{
+            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+            lineHeight: 1.2,
+            fontFamily: isKhmer ? 'Moul, cursive' : 'var(--font-playfair), Georgia, serif',
+            fontWeight: isKhmer ? 400 : 700,
+            color: '#4A2800',
+            letterSpacing: isKhmer ? '0.02em' : '-0.01em',
+            marginBottom: '8px',
+          }}
+        >
+          {isKhmer ? 'សិរីសួស្តី អាពាហ៍ពិពាហ៍' : 'With Joy & Love'}
+        </h2>
+        <div className="w-12 h-0.5 mx-auto rounded-full mt-3" style={{ background: 'linear-gradient(90deg, #BF953F, #FCF6BA, #AA771C)' }} />
+      </div>
+
+      {/* Quote */}
+      <div className={`p-6 sm:p-8 rounded-[28px] mb-14 max-w-2xl mx-auto relative ${themeConfig.cardBg}`}
+        style={{ border: '1.5px solid rgba(212,175,55,0.4)', boxShadow: '0 12px 40px -8px rgba(180,140,30,0.15)' }}>
         <div className="w-10 h-10 mx-auto rounded-full gold-foil-bg text-amber-950 flex items-center justify-center mb-4 shadow-md">
           <Heart className="w-5 h-5 fill-current" />
         </div>
-        <p className={`text-sm sm:text-base italic leading-relaxed text-slate-700 font-medium ${isKhmer ? 'font-khmer' : 'font-serif'}`}>
+        <p
+          className="italic leading-relaxed text-slate-700 font-medium mb-3"
+          style={{
+            fontSize: 'clamp(0.875rem, 2.2vw, 1rem)',
+            fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'var(--font-cormorant), Georgia, serif',
+            lineHeight: isKhmer ? 1.85 : 1.7,
+          }}
+        >
           {quoteText}
         </p>
-        <p className={`mt-3 text-xs sm:text-sm font-bold tracking-wider text-amber-800 uppercase ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+        <p
+          className="text-xs font-bold tracking-wider text-amber-800 uppercase"
+          style={{ fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit' }}
+        >
           — {quoteSource}
         </p>
       </div>
 
-      {/* Greeting Heading */}
-      <div className="max-w-3xl mx-auto mb-14">
-        <h2 className={`text-2xl sm:text-3xl text-amber-950 mb-2 ${isKhmer ? 'font-khmer-moul' : 'font-playfair font-bold'}`}>
-          {isKhmer ? 'សិរីសួស្តី អាពាហ៍ពិពាហ៍' : 'The Newlyweds'}
-        </h2>
-        <span className={`text-xs uppercase tracking-[0.25em] font-bold text-amber-800/70 block mb-4 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
-          {isKhmer ? 'កូនប្រុស និង កូនស្រី' : 'The Groom & The Bride'}
-        </span>
-        <p className={`text-xs sm:text-sm text-slate-700 leading-loose px-4 max-w-2xl mx-auto ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+      {/* Greeting */}
+      <div className="max-w-2xl mx-auto mb-14 px-2">
+        <p
+          className="text-slate-700 leading-loose"
+          style={{
+            fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+            fontFamily: isKhmer ? 'Kantumruy Pro, sans-serif' : 'inherit',
+            lineHeight: isKhmer ? 1.9 : 1.75,
+          }}
+        >
           {greeting}
         </p>
       </div>
@@ -89,13 +124,16 @@ export default function CoupleSection({
 
           {/* Role Pill */}
           <div className="absolute top-4 right-4">
-            <span className={`px-3.5 py-1 rounded-full text-xs font-bold gold-foil-bg text-amber-950 shadow-xs ${isKhmer ? 'font-khmer-koulen' : 'font-sans'}`}>
+            <span
+              className="px-3.5 py-1 rounded-full text-xs font-bold gold-foil-bg text-amber-950 shadow-xs"
+              style={{ fontFamily: isKhmer ? 'Koulen, cursive' : 'inherit', letterSpacing: '0.06em' }}
+            >
               {t.groomTitle}
             </span>
           </div>
 
           {/* Golden Framed Photo */}
-          <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden p-1.5 border-4 border-amber-300 shadow-xl group-hover:scale-105 transition-transform duration-500 mb-5 mt-4">
+          <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-full p-1.5 border-4 border-amber-300 shadow-xl group-hover:scale-105 transition-transform duration-500 mb-5 mt-4 overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={groom.photoUrl}
@@ -105,7 +143,16 @@ export default function CoupleSection({
           </div>
 
           {/* Groom Full Name */}
-          <h3 className={`text-2xl sm:text-3xl text-slate-900 tracking-wide ${isKhmer ? 'font-khmer-koulen' : 'font-playfair font-bold'}`}>
+          <h3
+            style={{
+              fontSize: 'clamp(1.25rem, 3.5vw, 1.625rem)',
+              lineHeight: 1.2,
+              fontFamily: isKhmer ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+              fontWeight: isKhmer ? 400 : 700,
+              color: '#1C1008',
+              letterSpacing: isKhmer ? '0.02em' : '-0.005em',
+            }}
+          >
             {groomName}
           </h3>
 

@@ -80,15 +80,34 @@ export function GoldDivider() {
 // Traditional Khmer Temple Arch Frame (ក្លោងទ្វារបុរាណ)
 export function KhmerArchFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative p-6 sm:p-10 rounded-[40px] bg-white/90 backdrop-blur-xl border-2 border-amber-300/80 shadow-[0_20px_50px_rgba(212,175,55,0.2)]">
-      {/* Top ornamental crown */}
-      <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center gap-2 px-5 py-1.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 text-amber-950 border border-yellow-200 shadow-md">
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-          <path d="M12 2L15 8L21 9L16.5 14L18 20L12 17L6 20L7.5 14L3 9L9 8L12 2Z" />
+    <div
+      className="relative rounded-[32px] sm:rounded-[40px] overflow-visible"
+      style={{
+        background: 'linear-gradient(160deg, rgba(255,253,248,0.97) 0%, rgba(255,250,235,0.95) 100%)',
+        boxShadow: '0 24px 64px -12px rgba(180,140,30,0.22), 0 0 0 1.5px rgba(212,175,55,0.45), 0 1px 0 rgba(255,255,255,0.9) inset',
+      }}
+    >
+      {/* Top crown ornament */}
+      <div
+        className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full z-10"
+        style={{
+          background: 'linear-gradient(135deg, #C9A227 0%, #E8CF6A 40%, #B38728 70%, #D4AF37 100%)',
+          boxShadow: '0 4px 14px rgba(180,130,20,0.4), inset 0 1px 0 rgba(255,255,255,0.4)',
+          border: '1px solid rgba(255,235,150,0.5)',
+        }}
+      >
+        {/* Lotus icon */}
+        <svg className="w-3.5 h-3.5 fill-amber-950 shrink-0" viewBox="0 0 24 24">
+          <path d="M12 3C12 3 14 8 16.5 10C19 12 21 13 21 15.5C21 18.5 18 21 12 22C6 21 3 18.5 3 15.5C3 13 5 12 7.5 10C10 8 12 3 12 3Z" />
         </svg>
-        <span className="font-khmer-moul text-xs tracking-wider">សិរីមង្គល</span>
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-          <path d="M12 2L15 8L21 9L16.5 14L18 20L12 17L6 20L7.5 14L3 9L9 8L12 2Z" />
+        <span
+          className="text-amber-950"
+          style={{ fontFamily: 'Koulen, cursive', fontSize: '11px', letterSpacing: '0.08em' }}
+        >
+          សិរីមង្គល
+        </span>
+        <svg className="w-3.5 h-3.5 fill-amber-950 shrink-0" viewBox="0 0 24 24">
+          <path d="M12 3C12 3 14 8 16.5 10C19 12 21 13 21 15.5C21 18.5 18 21 12 22C6 21 3 18.5 3 15.5C3 13 5 12 7.5 10C10 8 12 3 12 3Z" />
         </svg>
       </div>
 
@@ -97,7 +116,9 @@ export function KhmerArchFrame({ children }: { children: React.ReactNode }) {
       <KbachCorner position="bottom-left" />
       <KbachCorner position="bottom-right" />
 
-      {children}
+      <div className="px-6 sm:px-10 pt-8 pb-7">
+        {children}
+      </div>
     </div>
   );
 }

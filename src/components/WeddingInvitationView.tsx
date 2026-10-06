@@ -149,56 +149,121 @@ export default function WeddingInvitationView({
         autoPlayTrigger={isOpened}
       />
 
-      {/* 3. Hero Section (Traditional Khmer Royal Temple Archway) */}
+      {/* 3. Hero Section */}
       <section
         id="hero"
-        className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 pt-16 pb-20 overflow-hidden"
+        className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-28 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-300/20 via-transparent to-transparent pointer-events-none" />
+        {/* Soft ambient glow */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.14) 0%, transparent 70%)' }} />
 
-        {/* Traditional/Modern Golden Pill */}
-        <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-amber-300 shadow-sm text-amber-950 text-xs font-bold mb-6">
+        {/* Auspicious blessing tag */}
+        <div
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 animate-fade-in"
+          style={{
+            background: 'rgba(255,255,255,0.92)',
+            border: '1px solid rgba(212,175,55,0.5)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 2px 12px rgba(212,175,55,0.12)',
+          }}
+        >
           <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-          <span className={isKhmerLocale ? 'font-khmer-moul text-xs' : 'font-sans'}>{t.auspiciousBlessing}</span>
+          <span
+            className="text-xs font-bold text-amber-900"
+            style={{ fontFamily: isKhmerLocale ? 'Koulen, cursive' : 'inherit', letterSpacing: '0.08em' }}
+          >
+            {t.auspiciousBlessing}
+          </span>
         </div>
 
-        {/* Traditional Khmer Temple Arch Frame for the Couple */}
-        <div className="w-full max-w-2xl mx-auto my-2">
+        {/* Arch Frame */}
+        <div className="w-full max-w-xl mx-auto animate-fade-in delay-100">
           <KhmerArchFrame>
-            {/* Grand Title with Gold Foil */}
-            <h2 className={`text-2xl sm:text-3xl gold-foil-text tracking-wider mb-2 ${isKhmerLocale ? 'font-khmer-moul' : 'font-playfair font-bold'}`}>
+            {/* Section label */}
+            <p
+              className="text-[10px] uppercase tracking-[0.22em] font-bold mb-3 animate-fade-in-up delay-200"
+              style={{ color: '#9B7920', fontFamily: isKhmerLocale ? 'Kantumruy Pro, sans-serif' : 'inherit' }}
+            >
               {isKhmerLocale ? (data.titleKhmer || t.theWeddingOf) : t.theWeddingOf}
-            </h2>
+            </p>
 
-            {/* Couple Typography */}
-            <div className="my-6">
-              <h1 className={`text-3xl sm:text-5xl tracking-wide text-slate-900 leading-tight ${isKhmerLocale ? 'font-khmer-koulen' : 'font-playfair font-bold'}`}>
-                {displayGroom}
-              </h1>
-              <div className="flex items-center justify-center gap-4 my-2">
-                <div className="h-[1.5px] w-12 sm:w-20 bg-gradient-to-r from-transparent to-amber-400" />
-                <span className="font-serif italic text-3xl sm:text-5xl gold-foil-text font-bold">&</span>
-                <div className="h-[1.5px] w-12 sm:w-20 bg-gradient-to-l from-transparent to-amber-400" />
-              </div>
-              <h1 className={`text-3xl sm:text-5xl tracking-wide text-slate-900 leading-tight ${isKhmerLocale ? 'font-khmer-koulen' : 'font-playfair font-bold'}`}>
-                {displayBride}
-              </h1>
+            {/* Groom name */}
+            <h1
+              className="animate-fade-in-up delay-200"
+              style={{
+                fontSize: 'clamp(2rem, 6vw, 3rem)',
+                lineHeight: 1.15,
+                fontFamily: isKhmerLocale ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+                fontWeight: isKhmerLocale ? 400 : 700,
+                letterSpacing: isKhmerLocale ? '0.03em' : '-0.01em',
+                color: '#1C1008',
+              }}
+            >
+              {displayGroom}
+            </h1>
+
+            {/* & divider */}
+            <div className="flex items-center justify-center gap-4 my-3 animate-fade-in delay-300">
+              <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to right, transparent, rgba(212,175,55,0.6))' }} />
+              <span
+                className="text-3xl font-bold italic"
+                style={{
+                  fontFamily: 'Georgia, serif',
+                  background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #AA771C)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                &amp;
+              </span>
+              <div className="h-px flex-1 max-w-[80px]" style={{ background: 'linear-gradient(to left, transparent, rgba(212,175,55,0.6))' }} />
             </div>
 
-            {/* Sacred Lotus Gold Divider */}
+            {/* Bride name */}
+            <h1
+              className="animate-fade-in-up delay-300"
+              style={{
+                fontSize: 'clamp(2rem, 6vw, 3rem)',
+                lineHeight: 1.15,
+                fontFamily: isKhmerLocale ? 'Koulen, cursive' : 'var(--font-playfair), Georgia, serif',
+                fontWeight: isKhmerLocale ? 400 : 700,
+                letterSpacing: isKhmerLocale ? '0.03em' : '-0.01em',
+                color: '#1C1008',
+              }}
+            >
+              {displayBride}
+            </h1>
+
+            {/* Lotus divider */}
             <GoldDivider />
 
-            {/* Wedding Date Display */}
-            <div className="mt-2 px-5 py-2 rounded-full bg-amber-50/80 border border-amber-300 shadow-xs inline-block">
-              <p className={`text-xs sm:text-sm font-bold text-amber-950 ${isKhmerLocale ? 'font-khmer' : 'font-sans'}`}>
+            {/* Wedding date */}
+            <div
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full mt-1 animate-scale-in delay-500"
+              style={{
+                background: 'linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(255,248,220,0.85) 100%)',
+                border: '1px solid rgba(212,175,55,0.4)',
+              }}
+            >
+              <svg className="w-3 h-3 text-amber-600 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="1" y="3" width="14" height="12" rx="2"/>
+                <path d="M1 7h14"/>
+                <path d="M5 1v4M11 1v4" strokeLinecap="round"/>
+              </svg>
+              <p
+                className="text-xs sm:text-sm font-bold text-amber-950"
+                style={{ fontFamily: isKhmerLocale ? 'Kantumruy Pro, sans-serif' : 'inherit' }}
+              >
                 {formattedDate}
               </p>
             </div>
           </KhmerArchFrame>
         </div>
 
-        {/* Countdown Timer Block */}
-        <div className="mt-10 w-full max-w-md">
+        {/* Countdown Timer */}
+        <div className="mt-10 w-full max-w-md animate-fade-in delay-500">
           <CountdownTimer
             targetDate={mainEvent.date}
             targetTime={mainEvent.startTime.includes('07') ? '07:00' : '08:00'}
