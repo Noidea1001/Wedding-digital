@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Heart, Sparkles, Palette } from 'lucide-react';
+import { Heart, Sparkles, Palette, Globe } from 'lucide-react';
 import { WeddingInvitationData, WeddingTheme } from '@/types/wedding';
 import { THEME_CONFIGS } from '@/lib/themes';
+import { SupportedLocale, DICTIONARIES } from '@/lib/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 import EnvelopeCover from './EnvelopeCover';
 import AudioPlayer from './AudioPlayer';
 import CountdownTimer from './CountdownTimer';
@@ -24,14 +26,16 @@ interface WeddingInvitationViewProps {
 
 export default function WeddingInvitationView({
   data,
-  guestName = 'ភ្ញៀវកិត្តិយស',
+  guestName = '',
   guestGroup,
   allowThemeSwitching = true
 }: WeddingInvitationViewProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [activeTheme, setActiveTheme] = useState<WeddingTheme>(data.theme || 'khmer-royal-gold');
+  const [currentLocale, setCurrentLocale] = useState<SupportedLocale>(data.locale || 'km');
   const [showThemePicker, setShowThemePicker] = useState(false);
 
+  const t = DICTIONARIES[currentLocale] || DICTIONARIES.en;
   const themeConfig = THEME_CONFIGS[activeTheme] || THEME_CONFIGS['khmer-royal-gold'];
 
   const mainEvent = data.events[0] || {
@@ -42,19 +46,16 @@ export default function WeddingInvitationView({
     address: ''
   };
 
-  const displayGroom = data.groom.fullNameKhmer || data.groom.fullName;
-  const displayBride = data.bride.fullNameKhmer || data.bride.fullName;
-  const displayGroomNick = data.groom.nicknameKhmer || data.groom.nickname;
-  const displayBrideNick = data.bride.nicknameKhmer || data.bride.nickname;
+  const isKhmerLocale = currentLocale === 'km';
+  const displayGroom = (isKhmerLocale && data.groom.fullNameKhmer) ? data.groom.fullNameKhmer : data.groom.fullName;
+  const displayBride = (isKhmerLocale && data.bride.fullNameKhmer) ? data.bride.fullNameKhmer : data.bride.fullName;
+  const displayGroomNick = (isKhmerLocale && data.groom.nicknameKhmer) ? data.groom.nicknameKhmer : data.groom.nickname;
+  const displayBrideNick = (isKhmerLocale && data.bride.nicknameKhmer) ? data.bride.nicknameKhmer : data.bride.nickname;
 
-  const khmerThemesList: WeddingTheme[] = [
-    'khmer-royal-gold',
-    'khmer-angkor-lotus',
-    'khmer-modern-emerald',
-    'khmer-midnight-star',
-    'khmer-silk-terracotta',
-    'khmer-minimal-ivory'
-  ];
+  const resolvedGuestName = guestName || t.honoredGuest;
+
+  // Group theme keys by category for convenient browsing
+  const themeKeys = Object.keys(THEME_CONFIGS) as WeddingTheme[];
 
   return (
     <div className={`min-h-screen ${themeConfig.bodyBg} ${themeConfig.primaryText} relative selection:bg-amber-200 selection:text-amber-950 overflow-x-hidden pb-24 font-khmer`}>
@@ -65,57 +66,69 @@ export default function WeddingInvitationView({
           brideNicknameKhmer={data.bride.nicknameKhmer}
           groomNickname={data.groom.nickname}
           groomNicknameKhmer={data.groom.nicknameKhmer}
-          weddingDateFormatted={mainEvent.dateKhmer || mainEvent.date}
-          guestName={guestName}
+          weddingDateFormatted={isKhmerLocale ? (mainEvent.dateKhmer || mainEvent.date) : mainEvent.date}
+          guestName={resolvedGuestName}
           guestGroup={guestGroup}
           themeConfig={themeConfig}
           onOpenInvitation={() => setIsOpened(true)}
         />
       )}
 
-      {/* Floating Template Switcher for immediate testing & customization */}
-      {allowThemeSwitching && isOpened && (
-        <div className="fixed top-4 right-4 z-40">
-          <button
-            onClick={() => setShowThemePicker(!showThemePicker)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-800 text-xs font-bold border border-amber-300 shadow-lg backdrop-blur-md hover:bg-amber-50 transition-all font-khmer"
-          >
-            <Palette className="w-3.5 h-3.5 text-amber-700" />
-            <span className="hidden sm:inline">ផ្លាស់ប្តូរម៉ូត (Templates):</span>
-            <span className="text-amber-800">{themeConfig.nameKhmer.split(' ')[0]}</span>
-          </button>
+      {/* Top Floating Control Bar (Language Switcher & Theme Picker) */}
+      {isOpened && (
+        <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+          {/* Language Switcher */}
+          <LanguageSwitcher
+            currentLocale={currentLocale}
+            onLocaleChange={(loc) => setCurrentLocale(loc)}
+          />
 
-          {showThemePicker && (
-            <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border-2 border-amber-300 p-3 z-50 animate-fadeIn font-khmer">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
-                ជ្រើសរើសម៉ូតគំរូ (Select Khmer Template):
-              </p>
-              <div className="space-y-1.5 max-h-80 overflow-y-auto">
-                {khmerThemesList.map((tKey) => {
-                  const cfg = THEME_CONFIGS[tKey];
-                  const isCurrent = activeTheme === tKey;
-                  return (
-                    <button
-                      key={tKey}
-                      onClick={() => {
-                        setActiveTheme(tKey);
-                        setShowThemePicker(false);
-                      }}
-                      className={`w-full text-left p-2 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
-                        isCurrent
-                          ? 'bg-amber-100 text-amber-950 border border-amber-400'
-                          : 'hover:bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <div>
-                        <span>{cfg.nameKhmer}</span>
-                        <span className="block text-[10px] text-slate-400 font-normal">{cfg.name}</span>
-                      </div>
-                      {isCurrent && <span className="text-amber-700 font-bold">✓</span>}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Theme Switcher Button */}
+          {allowThemeSwitching && (
+            <div className="relative">
+              <button
+                onClick={() => setShowThemePicker(!showThemePicker)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-800 text-xs font-bold border border-slate-200 shadow-md backdrop-blur-md hover:bg-slate-50 transition-all"
+              >
+                <Palette className="w-3.5 h-3.5 text-amber-700" />
+                <span className="hidden sm:inline">{t.templates}:</span>
+                <span className="text-amber-800">{themeConfig.name.split(' ')[0]}</span>
+              </button>
+
+              {/* Extended Theme Picker Dropdown */}
+              {showThemePicker && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border-2 border-slate-200 p-3 z-50 animate-fadeIn max-h-96 overflow-y-auto">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
+                    {t.selectTemplate} (12 Choices):
+                  </p>
+                  <div className="space-y-1">
+                    {themeKeys.map((tKey) => {
+                      const cfg = THEME_CONFIGS[tKey];
+                      const isCurrent = activeTheme === tKey;
+                      return (
+                        <button
+                          key={tKey}
+                          onClick={() => {
+                            setActiveTheme(tKey);
+                            setShowThemePicker(false);
+                          }}
+                          className={`w-full text-left p-2 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
+                            isCurrent
+                              ? 'bg-amber-100 text-amber-950 border border-amber-300'
+                              : 'hover:bg-slate-50 text-slate-700'
+                          }`}
+                        >
+                          <div>
+                            <span className="block font-bold">{cfg.name}</span>
+                            <span className="text-[10px] text-slate-400 font-normal">{cfg.description}</span>
+                          </div>
+                          {isCurrent && <span className="text-amber-700 font-bold">✓</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -134,39 +147,38 @@ export default function WeddingInvitationView({
         id="hero"
         className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 pt-12 pb-16 overflow-hidden"
       >
-        {/* Soft background ambient gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-200/25 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-200/20 via-transparent to-transparent pointer-events-none" />
 
-        {/* Traditional Khmer Ribbon */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100/90 border border-amber-300 text-amber-950 text-xs font-bold mb-6 shadow-xs font-khmer">
-          <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-          <span>សិរីសួស្តី ជ័យមង្គល វិបុលសុខ</span>
+        {/* Traditional/Modern Ribbon */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 text-slate-800 text-xs font-bold mb-6 shadow-xs font-khmer">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <span>{t.auspiciousBlessing}</span>
         </div>
 
-        {/* Traditional Moul Script Heading */}
-        <h2 className="font-khmer-moul text-2xl sm:text-3xl text-amber-900 tracking-wider mb-2">
-          សិរីសួស្តី អាពាហ៍ពិពាហ៍
+        {/* Sacred / Grand Title */}
+        <h2 className={`${themeConfig.headerFontClass} text-2xl sm:text-3xl text-amber-900 tracking-wider mb-2`}>
+          {isKhmerLocale ? data.titleKhmer : t.theWeddingOf}
         </h2>
 
         {/* Grand Typography Couple Name */}
         <div className="max-w-3xl mx-auto my-4">
-          <h1 className="font-khmer-koulen text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight">
+          <h1 className={`${themeConfig.titleFontClass} text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight`}>
             {displayGroom}
           </h1>
           <div className="flex items-center justify-center gap-4 my-2">
             <div className="h-[2px] w-12 sm:w-20 bg-amber-400" />
-            <span className="font-serif italic text-3xl sm:text-5xl text-amber-700">&</span>
+            <span className="font-serif italic text-3xl sm:text-5xl text-amber-700">{t.and}</span>
             <div className="h-[2px] w-12 sm:w-20 bg-amber-400" />
           </div>
-          <h1 className="font-khmer-koulen text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight">
+          <h1 className={`${themeConfig.titleFontClass} text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight`}>
             {displayBride}
           </h1>
         </div>
 
         {/* Wedding Date Display */}
-        <div className="mt-4 px-4 py-1.5 rounded-full bg-white/80 border border-amber-200 shadow-xs inline-block">
-          <p className="text-xs sm:text-sm font-bold text-amber-900 font-khmer">
-            {mainEvent.dateKhmer || mainEvent.date}
+        <div className="mt-4 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 shadow-xs inline-block">
+          <p className="text-xs sm:text-sm font-bold text-slate-800 font-khmer">
+            {isKhmerLocale ? (mainEvent.dateKhmer || mainEvent.date) : mainEvent.date}
           </p>
         </div>
 
@@ -211,7 +223,7 @@ export default function WeddingInvitationView({
         themeConfig={themeConfig}
       />
 
-      {/* 8. Digital Gift / Cashless Envelope */}
+      {/* 8. Digital Gift / Cashless Registry */}
       <DigitalGiftSection
         gifts={data.gifts}
         themeConfig={themeConfig}
@@ -221,7 +233,7 @@ export default function WeddingInvitationView({
       <RsvpAndWishesSection
         weddingSlug={data.slug}
         initialWishes={data.wishes}
-        defaultGuestName={guestName !== 'ភ្ញៀវកិត្តិយស' && guestName !== 'Tamu Undangan' ? guestName : ''}
+        defaultGuestName={guestName}
         rsvpDeadlineKhmer={data.rsvpDeadlineKhmer}
         themeConfig={themeConfig}
       />
@@ -231,18 +243,21 @@ export default function WeddingInvitationView({
         <div className="w-14 h-14 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-6 shadow-sm border border-amber-300">
           <Heart className="w-7 h-7 fill-current animate-pulse-soft" />
         </div>
-        <h3 className="font-khmer-moul text-xl sm:text-2xl text-amber-900 mb-3">
-          ថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅ
+        <h3 className={`${themeConfig.headerFontClass} text-xl sm:text-2xl text-amber-900 mb-3`}>
+          {t.thankYouGratitude}
         </h3>
         <p className="mt-4 text-xs sm:text-sm text-slate-700 leading-loose">
-          យើងខ្ញុំជាមាតាបិតាទាំងសងខាង និងកូនប្រុស-កូនស្រី សូមគោរពថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅបំផុត ចំពោះវត្តមានដ៏ឧត្តុង្គឧត្តម និងពរជ័យដ៏ថ្លៃថ្លារបស់ ឯកឧត្តម លោកជំទាវ លោក លោកស្រី អ្នកនាងកញ្ញា ដែលបានចំណាយពេលវេលាដ៏មានតម្លៃអញ្ជើញចូលរួមជាកិត្តិយសក្នុងពិធីមង្គលការរបស់យើងខ្ញុំ។
+          {isKhmerLocale 
+            ? 'យើងខ្ញុំជាមាតាបិតាទាំងសងខាង និងកូនប្រុស-កូនស្រី សូមគោរពថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅបំផុត ចំពោះវត្តមានដ៏ឧត្តុង្គឧត្តម និងពរជ័យដ៏ថ្លៃថ្លារបស់ ឯកឧត្តម លោកជំទាវ លោក លោកស្រី អ្នកនាងកញ្ញា ដែលបានចំណាយពេលវេលាដ៏មានតម្លៃអញ្ជើញចូលរួមជាកិត្តិយសក្នុងពិធីមង្គលការរបស់យើងខ្ញុំ។'
+            : 'We would like to express our deepest gratitude to all our families, friends, and honored guests for your warm presence, blessings, and love on our special day.'
+          }
         </p>
-        <div className="mt-8 pt-6 border-t border-amber-200">
-          <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">ដោយក្តីគោរពរាប់អានដ៏ខ្ពង់ខ្ពស់ពី,</p>
-          <p className="font-khmer-koulen text-2xl text-slate-900 mt-2">
+        <div className="mt-8 pt-6 border-t border-slate-200">
+          <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">{t.warmRegards}</p>
+          <p className={`${themeConfig.titleFontClass} text-2xl text-slate-900 mt-2`}>
             {displayGroomNick} & {displayBrideNick}
           </p>
-          <p className="text-xs text-amber-900 mt-1 font-bold">ព្រមទាំងមាតាបិតាទាំងសងខាង</p>
+          <p className="text-xs text-amber-900 mt-1 font-bold">{t.bothFamilies}</p>
         </div>
       </section>
 

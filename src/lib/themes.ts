@@ -3,6 +3,7 @@ import { WeddingTheme } from '@/types/wedding';
 export interface ThemeConfig {
   name: string;
   nameKhmer: string;
+  category: 'Khmer Heritage' | 'Modern Luxury' | 'Romantic Floral' | 'Boho & Nature' | 'Minimalist';
   description: string;
   bodyBg: string;
   cardBg: string;
@@ -24,11 +25,12 @@ export interface ThemeConfig {
 }
 
 export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
-  // 1. Khmer Royal Gold Heritage (Traditional Palace Gold & Crimson)
+  // 1. Khmer Royal Gold Heritage
   'khmer-royal-gold': {
     name: 'Khmer Royal Gold',
     nameKhmer: 'រាជវង្សបុរាណ (មាស & ក្រហម)',
-    description: 'រចនាបថប្រពៃណីខ្មែរបុរាណ ក្បាច់រាជវាំង ពណ៌មាស និងក្រហមឆ្អៅ',
+    category: 'Khmer Heritage',
+    description: 'Traditional Royal Palace gold with sacred lotus motifs & burgundy accents',
     bodyBg: 'bg-[#FFFDF7]',
     cardBg: 'bg-white/95 backdrop-blur-md shadow-md border-2 border-amber-300/80',
     headerBg: 'bg-gradient-to-b from-[#FEF9E7] via-[#FFFDF7] to-[#FEF9E7]',
@@ -48,11 +50,12 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-amber-600 to-amber-700'
   },
 
-  // 2. Angkor Lotus Romance (Blush Pink & Ivory Sacred Lotus)
+  // 2. Angkor Lotus Romance
   'khmer-angkor-lotus': {
     name: 'Angkor Lotus Romance',
     nameKhmer: 'ផ្កាឈូកអង្គរ (ផ្កាឈូក & មាស)',
-    description: 'ផ្កាឈូកពិសិដ្ឋអង្គរ ស្រទន់ រ៉ូមែនទិក ជាមួយពណ៌ផ្កាឈូក និងមាស',
+    category: 'Khmer Heritage',
+    description: 'Sacred Angkor lotus blossoms with blush pink & champagne gold',
     bodyBg: 'bg-[#FCF8F9]',
     cardBg: 'bg-white/95 backdrop-blur-md shadow-sm border border-rose-200/80',
     headerBg: 'bg-gradient-to-b from-[#FDF0F3] via-[#FCF8F9] to-[#FDF0F3]',
@@ -72,11 +75,12 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-rose-600 to-rose-700'
   },
 
-  // 3. Modern Emerald Jade (Luxury Jade Green & Champagne Gold)
+  // 3. Modern Emerald Jade
   'khmer-modern-emerald': {
     name: 'Modern Emerald Jade',
     nameKhmer: 'ត្បូងមរកត (បៃតងត្បូង & មាស)',
-    description: 'ភាពថ្លៃថ្នូរទំនើប ត្បូងមរកតបៃតងខ្ចី និងពណ៌ទឹកមាសស្រាល',
+    category: 'Modern Luxury',
+    description: 'Regal emerald jade tones paired with luminous champagne gold',
     bodyBg: 'bg-[#F4F8F5]',
     cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-emerald-200/90',
     headerBg: 'bg-gradient-to-b from-[#E6EFE8] to-[#F4F8F5]',
@@ -96,11 +100,12 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-emerald-700 to-emerald-900'
   },
 
-  // 4. Majestic Midnight Starlight (Evening Ballroom Deep Navy)
+  // 4. Midnight Starlight
   'khmer-midnight-star': {
     name: 'Midnight Starlight',
-    nameKhmer: 'រាត្រីតារា (ខៀវរាត្រី & ពេជ្រទឹកមាស)',
-    description: 'រចនាបថកម្មវិធីពេលល្ងាចដ៏ប្រណិត ពន្លឺផ្កាយ និងពេជ្រភ្លឺផ្លេក',
+    nameKhmer: 'រាត្រីតារា (ខៀវរាត្រី & ពេជ្រ)',
+    category: 'Modern Luxury',
+    description: 'Grand evening ballroom glamour with deep navy and starlight gold',
     bodyBg: 'bg-[#0A1128]',
     cardBg: 'bg-[#141F3D]/95 backdrop-blur-md shadow-xl border border-amber-400/30 text-slate-100',
     headerBg: 'bg-gradient-to-b from-[#060B1C] via-[#0A1128] to-[#0A1128]',
@@ -120,11 +125,12 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-amber-500 to-amber-700'
   },
 
-  // 5. Traditional Khmer Silk (Golden Raw Silk & Amber)
+  // 5. Traditional Khmer Silk
   'khmer-silk-terracotta': {
     name: 'Khmer Silk & Amber',
     nameKhmer: 'សូត្រខ្មែរ (សូត្រមាស & ដីឥដ្ឋ)',
-    description: 'ក្បាច់សំពត់ចងក្បិនសូត្រខ្មែរ ពណ៌មាសលឿងទុំ និងកក់ក្តៅ',
+    category: 'Khmer Heritage',
+    description: 'Golden Cambodian raw silk textures and warm amber earth hues',
     bodyBg: 'bg-[#FDF9F2]',
     cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-amber-200/90',
     headerBg: 'bg-gradient-to-b from-[#F8EFE0] to-[#FDF9F2]',
@@ -144,11 +150,12 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-amber-700 to-amber-900'
   },
 
-  // 6. Minimalist Ivory & Champagne
+  // 6. Minimalist Ivory & Gold
   'khmer-minimal-ivory': {
     name: 'Minimalist Ivory',
-    nameKhmer: 'សាមញ្ញប្រណិត (ភ្លុក & មាសស្រាល)',
-    description: 'រចនាបថទាន់សម័យ សាមញ្ញ ស្អាតស្អំ ពណ៌ភ្លុក និងមាសស្រាល',
+    nameKhmer: 'សាមញ្ញប្រណិត (ភ្លុក & មាស)',
+    category: 'Minimalist',
+    description: 'Clean luxury ivory linen, subtle hairline gold borders, timeless chic',
     bodyBg: 'bg-[#FAFAF9]',
     cardBg: 'bg-white/95 backdrop-blur-md shadow-xs border border-stone-200',
     headerBg: 'bg-gradient-to-b from-[#F5F5F4] to-[#FAFAF9]',
@@ -168,10 +175,161 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
     sealColor: 'from-stone-700 to-stone-900'
   },
 
-  // Legacy fallback themes
+  // 7. French Rose Gold & Lace (Paris Romantic)
+  'french-rose-gold': {
+    name: 'French Rose Gold & Lace',
+    nameKhmer: 'ផ្ការ៉ូសមាសប៉ារីស (Paris Romance)',
+    category: 'Romantic Floral',
+    description: 'Parisian bridal romance with delicate rose gold, cream lace & peony blooms',
+    bodyBg: 'bg-[#FCF7F8]',
+    cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-rose-200',
+    headerBg: 'bg-gradient-to-b from-[#FCECEF] via-[#FCF7F8] to-[#FCF7F8]',
+    primaryText: 'text-[#461220]',
+    secondaryText: 'text-[#783D4F]',
+    accentText: 'text-[#C95D76]',
+    accentBg: 'bg-gradient-to-r from-[#D87088] to-[#B8526A] text-white font-medium hover:opacity-95',
+    accentBorder: 'border-[#F4C2CD]',
+    navBg: 'bg-white/90 border-rose-200 shadow-xl text-[#461220]',
+    envelopeBg: 'from-[#FCECEF] via-[#F8D5DC] to-[#F1B9C4]',
+    envelopeFlap: 'bg-[#E398A8]',
+    badgeBg: 'bg-rose-100 text-rose-900 border border-rose-200',
+    dividerColor: 'border-rose-200',
+    glowColor: 'rgba(216, 112, 136, 0.3)',
+    headerFontClass: 'font-playfair',
+    titleFontClass: 'font-cormorant',
+    sealColor: 'from-rose-600 to-rose-800'
+  },
+
+  // 8. Modern Sage Botanical (Tuscany / California)
+  'modern-sage-botanical': {
+    name: 'Tuscany Sage Botanical',
+    nameKhmer: 'សួនរុក្ខសាស្ត្រ (Sage Botanical)',
+    category: 'Boho & Nature',
+    description: 'Earthy Italian olive branches, calming sage green & sun-bleached linen',
+    bodyBg: 'bg-[#F5F7F5]',
+    cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-emerald-200',
+    headerBg: 'bg-gradient-to-b from-[#E9EFE9] to-[#F5F7F5]',
+    primaryText: 'text-[#20392B]',
+    secondaryText: 'text-[#486855]',
+    accentText: 'text-[#3E6B48]',
+    accentBg: 'bg-gradient-to-r from-[#4E7D5A] to-[#34593E] text-white font-medium hover:opacity-95',
+    accentBorder: 'border-[#BDD6C2]',
+    navBg: 'bg-white/90 border-emerald-200 shadow-xl text-[#20392B]',
+    envelopeBg: 'from-[#E9EFE9] via-[#D7E3D8] to-[#C3D4C4]',
+    envelopeFlap: 'bg-[#A8C2AA]',
+    badgeBg: 'bg-emerald-100 text-emerald-900 border border-emerald-200',
+    dividerColor: 'border-emerald-200',
+    glowColor: 'rgba(78, 125, 90, 0.25)',
+    headerFontClass: 'font-cormorant',
+    titleFontClass: 'font-playfair',
+    sealColor: 'from-emerald-700 to-emerald-900'
+  },
+
+  // 9. Black Tie Luxury (NYC & Hollywood Chic)
+  'black-tie-luxury': {
+    name: 'Black Tie Luxury Onyx',
+    nameKhmer: 'រាត្រីអភិជន (Black Tie Onyx)',
+    category: 'Modern Luxury',
+    description: 'High-fashion editorial aesthetic with deep onyx black & metallic champagne gold',
+    bodyBg: 'bg-[#0E0E10]',
+    cardBg: 'bg-[#1A1A1E]/95 backdrop-blur-md shadow-2xl border border-amber-400/40 text-slate-100',
+    headerBg: 'bg-gradient-to-b from-[#050507] via-[#0E0E10] to-[#0E0E10]',
+    primaryText: 'text-[#F5F5F7]',
+    secondaryText: 'text-[#A1A1A6]',
+    accentText: 'text-[#D4AF37]',
+    accentBg: 'bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#C49B28] text-black font-bold hover:opacity-95',
+    accentBorder: 'border-amber-400/50',
+    navBg: 'bg-[#1A1A1E]/95 border-amber-400/30 shadow-2xl text-slate-100',
+    envelopeBg: 'from-[#1A1A1E] via-[#121215] to-[#08080A]',
+    envelopeFlap: 'bg-[#26262B]',
+    badgeBg: 'bg-amber-950/90 text-amber-300 border border-amber-500/50',
+    dividerColor: 'border-amber-400/40',
+    glowColor: 'rgba(212, 175, 55, 0.4)',
+    headerFontClass: 'font-cinzel',
+    titleFontClass: 'font-playfair',
+    sealColor: 'from-amber-600 to-amber-800'
+  },
+
+  // 10. Boho Terracotta Chic (Bohemian Sunset & Pampas)
+  'boho-terracotta': {
+    name: 'Boho Terracotta Chic',
+    nameKhmer: 'រចនាបថបូហូ (Boho Terracotta)',
+    category: 'Boho & Nature',
+    description: 'Warm desert sunset, bohemian terracotta clay & natural pampas grass tones',
+    bodyBg: 'bg-[#FAF6F2]',
+    cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-amber-200',
+    headerBg: 'bg-gradient-to-b from-[#F6EDE4] to-[#FAF6F2]',
+    primaryText: 'text-[#4A2511]',
+    secondaryText: 'text-[#875034]',
+    accentText: 'text-[#C05D2D]',
+    accentBg: 'bg-gradient-to-r from-[#C05D2D] to-[#99431B] text-white font-medium hover:opacity-95',
+    accentBorder: 'border-[#ECC2AB]',
+    navBg: 'bg-white/90 border-amber-200 shadow-xl text-[#4A2511]',
+    envelopeBg: 'from-[#F6EDE4] via-[#EED8C6] to-[#E2BEA5]',
+    envelopeFlap: 'bg-[#D2A083]',
+    badgeBg: 'bg-amber-100 text-amber-900 border border-amber-200',
+    dividerColor: 'border-amber-200',
+    glowColor: 'rgba(192, 93, 45, 0.3)',
+    headerFontClass: 'font-cormorant',
+    titleFontClass: 'font-playfair',
+    sealColor: 'from-amber-700 to-amber-900'
+  },
+
+  // 11. Tropical Beach Sunset (Bali / Koh Rong)
+  'tropical-beach': {
+    name: 'Tropical Beach Sunset',
+    nameKhmer: 'ឆ្នេរសមុទ្រត្រូពិក (Tropical Beach)',
+    category: 'Boho & Nature',
+    description: 'Turquoise ocean waters, warm golden beach sand & tropical coral vibes',
+    bodyBg: 'bg-[#F5F9FA]',
+    cardBg: 'bg-white/95 backdrop-blur-md shadow-md border border-cyan-200',
+    headerBg: 'bg-gradient-to-b from-[#E3F2F5] to-[#F5F9FA]',
+    primaryText: 'text-[#123942]',
+    secondaryText: 'text-[#3E6C77]',
+    accentText: 'text-[#0E7A8A]',
+    accentBg: 'bg-gradient-to-r from-[#0E7A8A] to-[#0A5661] text-cyan-50 font-medium hover:opacity-95',
+    accentBorder: 'border-[#9FD4DE]',
+    navBg: 'bg-white/90 border-cyan-200 shadow-xl text-[#123942]',
+    envelopeBg: 'from-[#E3F2F5] via-[#C9E7EC] to-[#A8D8E0]',
+    envelopeFlap: 'bg-[#7EC1CD]',
+    badgeBg: 'bg-cyan-100 text-cyan-900 border border-cyan-300',
+    dividerColor: 'border-cyan-300',
+    glowColor: 'rgba(14, 122, 138, 0.3)',
+    headerFontClass: 'font-cormorant',
+    titleFontClass: 'font-playfair',
+    sealColor: 'from-cyan-700 to-cyan-900'
+  },
+
+  // 12. Zen Cherry Blossom (Sakura & Soft Stone)
+  'zen-cherry-blossom': {
+    name: 'Zen Cherry Blossom',
+    nameKhmer: 'ផ្កាសាគូរ៉ាជប៉ុន (Zen Sakura)',
+    category: 'Minimalist',
+    description: 'Serene Japanese minimalist aesthetic with soft sakura petal pink & pebble grey',
+    bodyBg: 'bg-[#FAF8F8]',
+    cardBg: 'bg-white/95 backdrop-blur-md shadow-sm border border-pink-200',
+    headerBg: 'bg-gradient-to-b from-[#FDF0F3] to-[#FAF8F8]',
+    primaryText: 'text-[#2D2326]',
+    secondaryText: 'text-[#68555A]',
+    accentText: 'text-[#B8576E]',
+    accentBg: 'bg-gradient-to-r from-[#B8576E] to-[#963E53] text-white font-medium hover:opacity-95',
+    accentBorder: 'border-[#F5C7D2]',
+    navBg: 'bg-white/90 border-pink-200 shadow-xl text-[#2D2326]',
+    envelopeBg: 'from-[#FDF0F3] via-[#F8DEE4] to-[#F2CAD2]',
+    envelopeFlap: 'bg-[#E3A9B5]',
+    badgeBg: 'bg-pink-100 text-pink-900 border border-pink-200',
+    dividerColor: 'border-pink-200',
+    glowColor: 'rgba(184, 87, 110, 0.25)',
+    headerFontClass: 'font-cormorant',
+    titleFontClass: 'font-cormorant',
+    sealColor: 'from-pink-700 to-rose-900'
+  },
+
+  // Fallbacks
   'floral-rose': {
     name: 'Floral Rose & Gold',
     nameKhmer: 'ផ្ការ៉ូស & មាស',
+    category: 'Romantic Floral',
     description: 'Blush pink floral romance',
     bodyBg: 'bg-[#FAF5F5]',
     cardBg: 'bg-white/90 backdrop-blur-md shadow-sm border border-rose-100',
@@ -194,6 +352,7 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
   'modern-sage': {
     name: 'Modern Sage & Olive',
     nameKhmer: 'ស្លឹកអូលីវ & បៃតងខ្ចី',
+    category: 'Boho & Nature',
     description: 'Modern sage botanical',
     bodyBg: 'bg-[#F4F7F4]',
     cardBg: 'bg-white/90 backdrop-blur-md shadow-sm border border-emerald-100',
@@ -216,6 +375,7 @@ export const THEME_CONFIGS: Record<WeddingTheme, ThemeConfig> = {
   'royal-gold': {
     name: 'Royal Navy & Gold',
     nameKhmer: 'ខៀវរាជវង្ស & មាស',
+    category: 'Modern Luxury',
     description: 'Navy and champagne gold',
     bodyBg: 'bg-[#0B132B]',
     cardBg: 'bg-[#1C2541]/90 backdrop-blur-md shadow-md border border-amber-500/20 text-slate-100',

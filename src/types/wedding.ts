@@ -1,17 +1,26 @@
+import { SupportedLocale } from '@/lib/i18n';
+
 export type WeddingTheme = 
-  // Khmer Dedicated Templates
+  // 1. Khmer Dedicated Heritage Collection
   | 'khmer-royal-gold'      // Traditional Royal Golden Heritage (រាជវង្សបុរាណ)
   | 'khmer-angkor-lotus'     // Angkor Lotus Romance (ផ្កាឈូកអង្គរ)
   | 'khmer-modern-emerald'   // Modern Emerald Jade & Gold (ត្បូងមរកត)
   | 'khmer-midnight-star'    // Majestic Midnight Starlight (រាត្រីតារា)
   | 'khmer-silk-terracotta'  // Traditional Khmer Silk & Amber (សូត្រខ្មែរ)
   | 'khmer-minimal-ivory'    // Pure Minimalist Ivory & Gold (សាមញ្ញប្រណិត)
-  // Additional Modern International
+  // 2. Global World Collections
+  | 'french-rose-gold'       // Paris French Romantic Rose Gold & Lace
+  | 'modern-sage-botanical'  // Tuscany Modern Sage Green & Botanical Garden
+  | 'black-tie-luxury'       // NYC Black Tie Luxury Onyx & Champagne Gold
+  | 'boho-terracotta'        // Bohemian Terracotta & Sunburst Pampas Grass
+  | 'tropical-beach'         // Bali / Hawaii Ocean Breeze & Tropical Coral
+  | 'zen-cherry-blossom'     // Tokyo Zen Garden & Soft Cherry Blossom
+  // Legacy
   | 'floral-rose'
   | 'modern-sage'
   | 'royal-gold';
 
-export type FontStyle = 'khmer-moul' | 'khmer-koulen' | 'khmer-sans' | 'playfair';
+export type FontStyle = 'khmer-moul' | 'khmer-koulen' | 'khmer-sans' | 'playfair' | 'cormorant' | 'cinzel';
 
 export interface CouplePerson {
   fullName: string;
@@ -26,20 +35,20 @@ export interface CouplePerson {
   instagram?: string;
   telegram?: string;
   childOrderText: string;
-  childOrderTextKhmer?: string; // e.g. "កូនប្រុសច្បងរបស់" / "កូនស្រីពៅរបស់"
+  childOrderTextKhmer?: string;
 }
 
 export interface WeddingEvent {
   id: string;
-  title: string;          // e.g. "ពិធីហែជំនូន & កាត់សក់បង្កក់សិរី"
+  title: string;          // e.g. "Holy Matrimony" / "ពិធីហែជំនូន"
   titleKhmer?: string;
   date: string;           // "2026-11-28"
-  dateKhmer?: string;     // e.g. "ថ្ងៃសៅរ៍ ទី២៨ ខែវិច្ឆិកា ឆ្នាំ២០២៦"
+  dateKhmer?: string;
   startTime: string;      // "07:30"
   endTime: string;        // "11:00"
-  timeZone: string;       // "ICT" | "GMT+7"
-  venueName: string;      // e.g. "The Premier Centre Sen Sok"
-  address: string;        // e.g. "រាជធានីភ្នំពេញ (Phnom Penh)"
+  timeZone: string;       // "ICT" | "EST" | "CET" | "GMT+7"
+  venueName: string;
+  address: string;
   mapsUrl: string;
   mapsEmbedUrl?: string;
   livestreamUrl?: string;
@@ -63,10 +72,19 @@ export interface GalleryPhoto {
 
 export interface DigitalGift {
   id: string;
-  type: 'aba_khqr' | 'wing_khqr' | 'acleda_khqr' | 'bank' | 'gift_address';
-  providerName: string;   // "ABA Bank KHQR", "Wing Bank", "ACLEDA Bank"
-  accountNumber: string;  // "000 123 456"
-  accountHolder: string;  // "SOK VISAL"
+  type: 
+    | 'aba_khqr' 
+    | 'wing_khqr' 
+    | 'acleda_khqr' 
+    | 'paypal' 
+    | 'wise' 
+    | 'zelle' 
+    | 'venmo' 
+    | 'bank' 
+    | 'gift_address';
+  providerName: string;   // "ABA Bank KHQR", "PayPal", "Wise Transfer", "Zelle", "Venmo", "Bank Wire"
+  accountNumber: string;  // "paypal.me/couple" or account number / IBAN
+  accountHolder: string;  // "Visal & Thida"
   qrCodeUrl?: string;
   note?: string;
 }
@@ -77,6 +95,7 @@ export interface GuestItem {
   nameKhmer?: string;
   phone?: string;
   telegram?: string;
+  email?: string;
   group: 'VIP' | 'Family' | 'Colleague' | 'Friends';
   slug: string;
   status: 'pending' | 'attending' | 'declined';
@@ -98,10 +117,11 @@ export interface WeddingInvitationData {
   id: string;
   slug: string;
   templateId: string;
+  locale?: SupportedLocale;
   title: string;
-  titleKhmer: string; // "សិរីសួស្តី អាពាហ៍ពិពាហ៍"
+  titleKhmer: string;
   greetingText: string;
-  greetingTextKhmer: string;
+  greetingTextKhmer?: string;
   quote: {
     text: string;
     textKhmer?: string;

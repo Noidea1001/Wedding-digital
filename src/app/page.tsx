@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Heart, 
@@ -17,54 +17,78 @@ import {
   Smartphone,
   Gift,
   Send,
-  Layers
+  Layers,
+  Globe
 } from 'lucide-react';
 import { THEME_CONFIGS } from '@/lib/themes';
 import { ALL_PRESET_WEDDINGS } from '@/lib/mockData';
+import { WeddingTheme } from '@/types/wedding';
 
 export default function HomePage() {
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
   const templatesList = [
     {
       id: 'visal-thida',
       themeKey: 'khmer-royal-gold',
-      titleKhmer: 'រាជវង្សបុរាណ (Khmer Royal Gold)',
-      desc: 'រចនាបថប្រពៃណីរាជវាំងខ្មែរ ក្បាច់ភ្ញីទេស ពណ៌មាស និងក្រហមឆ្អៅ',
+      category: 'Khmer Heritage',
+      title: 'Khmer Royal Gold (រាជវង្សបុរាណ)',
+      desc: 'Traditional Royal Palace gold with sacred lotus motifs & burgundy accents',
       couple: 'សុខ វិសាល & ចាន់ ធីតា',
-      badge: 'ពេញនិយមបំផុត (Most Popular)'
+      badge: 'Khmer Traditional'
     },
     {
       id: 'dara-bopha',
       themeKey: 'khmer-angkor-lotus',
-      titleKhmer: 'ផ្កាឈូកអង្គរ (Angkor Lotus Romance)',
-      desc: 'ផ្កាឈូកពិសិដ្ឋអង្គរ ស្រទន់ រ៉ូមែនទិក ជាមួយពណ៌ផ្កាឈូក និងមាស',
+      category: 'Khmer Heritage',
+      title: 'Angkor Lotus Romance (ផ្កាឈូកអង្គរ)',
+      desc: 'Sacred Angkor lotus blossoms with blush pink & champagne gold',
       couple: 'ម៉េង ដារ៉ា & គង់ បុប្ផា',
-      badge: 'រ៉ូមែនទិក (Romantic)'
+      badge: 'Lotus Blossom'
     },
     {
-      id: 'ratanak-socheata',
-      themeKey: 'khmer-modern-emerald',
-      titleKhmer: 'ត្បូងមរកត (Modern Emerald Jade)',
-      desc: 'ភាពថ្លៃថ្នូរទំនើប ត្បូងមរកតបៃតងខ្ចី និងពណ៌ទឹកមាសស្រាល',
-      couple: 'ជា រតនៈ & អ៊ុ សុជាតា',
-      badge: 'ទំនើបប្រណិត (Luxury Chic)'
+      id: 'julien-charlotte',
+      themeKey: 'french-rose-gold',
+      category: 'Romantic Floral',
+      title: 'French Rose Gold & Lace (Paris Romance)',
+      desc: 'Parisian bridal romance with delicate rose gold, cream lace & peony blooms',
+      couple: 'Julien & Charlotte (Paris, France)',
+      badge: 'French Romance'
     },
     {
-      id: 'seyha-muniroth',
-      themeKey: 'khmer-midnight-star',
-      titleKhmer: 'រាត្រីតារា (Midnight Starlight)',
-      desc: 'រចនាបថកម្មវិធីពេលល្ងាចដ៏ប្រណិត ពន្លឺផ្កាយ និងពេជ្រភ្លឺផ្លេក',
-      couple: 'តែ សីហា & ហេង មុន្នីរ័ត្ន',
-      badge: 'រាត្រីសមោសរ (Evening Banquet)'
+      id: 'alexander-victoria',
+      themeKey: 'black-tie-luxury',
+      category: 'Modern Luxury',
+      title: 'Black Tie Luxury Onyx (NYC / London)',
+      desc: 'High-fashion editorial aesthetic with deep onyx black & metallic champagne gold',
+      couple: 'Alexander & Victoria (New York, USA)',
+      badge: 'Black Tie Gala'
     },
     {
-      id: 'vibol-devi',
-      themeKey: 'khmer-silk-terracotta',
-      titleKhmer: 'សូត្រខ្មែរ (Traditional Silk & Amber)',
-      desc: 'ក្បាច់សំពត់ចងក្បិនសូត្រខ្មែរ ពណ៌មាសលឿងទុំ និងកក់ក្តៅ',
-      couple: 'អ៊ុក វិបុល & ស៊ន ទេវី',
-      badge: 'សូត្រខ្មែរ (Khmer Silk)'
+      id: 'oliver-sophia',
+      themeKey: 'modern-sage-botanical',
+      category: 'Boho & Nature',
+      title: 'Tuscany Sage Botanical Garden',
+      desc: 'Earthy Italian olive branches, calming sage green & sun-bleached linen',
+      couple: 'Oliver & Sophia (Tuscany, Italy)',
+      badge: 'Botanical Garden'
+    },
+    {
+      id: 'leo-maya',
+      themeKey: 'tropical-beach',
+      category: 'Boho & Nature',
+      title: 'Tropical Beach Sunset (Koh Rong / Bali)',
+      desc: 'Turquoise ocean waters, warm golden beach sand & tropical coral vibes',
+      couple: 'Leo & Maya (Tropical Destination)',
+      badge: 'Beach Wedding'
     }
   ];
+
+  const categories = ['All', 'Khmer Heritage', 'Romantic Floral', 'Modern Luxury', 'Boho & Nature'];
+
+  const filteredTemplates = selectedCategory === 'All'
+    ? templatesList
+    : templatesList.filter((t) => t.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-[#FFFDF7] text-slate-800 flex flex-col selection:bg-amber-200 selection:text-amber-950 font-khmer">
@@ -80,7 +104,7 @@ export default function HomePage() {
                 សំបុត្រការឌីជីថល
               </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Khmer Digital Wedding
+                Global & Khmer Wedding Platform
               </span>
             </div>
           </Link>
@@ -91,7 +115,7 @@ export default function HomePage() {
               target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-900 hover:bg-amber-50 transition-all border border-amber-200"
             >
-              <span>មើលគំរូផ្ទាល់ (Live Demo)</span>
+              <span>Demo Undangan (Live)</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 
@@ -99,7 +123,7 @@ export default function HomePage() {
               href="/dashboard"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs sm:text-sm font-bold shadow-md shadow-amber-900/15 transition-all"
             >
-              <span>គ្រប់គ្រងសំបុត្រ (Dashboard)</span>
+              <span>Dashboard Host</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -113,8 +137,8 @@ export default function HomePage() {
 
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-950 text-xs font-bold mb-6 shadow-xs animate-fadeIn">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>វេទិកាសំបុត្រអាពាហ៍ពិពាហ៍ឌីជីថលខ្មែរទំនើបបំផុត</span>
+            <Globe className="w-3.5 h-3.5 text-amber-700" />
+            <span>វេទិកាសំបុត្រអាពាហ៍ពិពាហ៍ឌីជីថលសកលលោក (Worldwide & Khmer)</span>
           </div>
 
           <h1 className="font-khmer-moul text-3xl sm:text-5xl lg:text-6xl text-amber-950 tracking-wide leading-[1.35] mb-3">
@@ -122,11 +146,11 @@ export default function HomePage() {
           </h1>
 
           <p className="font-khmer-koulen text-xl sm:text-3xl text-amber-800 tracking-wide mb-6">
-            រចនាបថប្រពៃណីខ្មែរ & ភាពថ្លៃថ្នូរទាន់សម័យ
+            Worldwide Elegant Digital Wedding Invitations
           </p>
 
           <p className="text-xs sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            បង្កើតសំបុត្រអញ្ជើញឌីជីថលជាមួយការបើកស្រោមសំបុត្របែបប្រពៃណី, ផ្ញើតាម <strong>Telegram & WhatsApp</strong> ត្រឹមតែ ១-Click, ចាក់ភ្លេងការ, ស្កេនចងដៃតាម <strong>ABA KHQR</strong>, និងកត់ត្រាវត្តមានភ្ញៀវដោយស្វ័យប្រវត្តិ។
+            Create luxurious, interactive digital wedding invitations with wax seal envelope opening, romantic background music, multi-language support (ភាសាខ្មែរ, English, Français, 中文, Bahasa), 1-click <strong>Telegram & WhatsApp</strong> broadcasts, and instant cashless gifts via <strong>ABA KHQR, PayPal, Wise, and Zelle</strong>.
           </p>
 
           {/* CTA Buttons */}
@@ -136,7 +160,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-2xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs sm:text-sm shadow-xl shadow-amber-900/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
               <Sliders className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>កែសម្រួលសំបុត្រ (Open Editor)</span>
+              <span>បើកផ្ទាំងកែសម្រួល (Open Builder)</span>
             </Link>
 
             <Link
@@ -144,42 +168,57 @@ export default function HomePage() {
               target="_blank"
               className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-white hover:bg-amber-50/70 border border-amber-300 text-amber-950 font-bold text-xs sm:text-sm shadow-xs transition-all"
             >
-              <span>មើលគំរូជាក់ស្តែង (View Demo)</span>
+              <span>មើលគំរូសំបុត្រ (Live Preview)</span>
               <ExternalLink className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        {/* MANY TEMPLATES SHOWCASE SECTION */}
+        {/* MANY CHOICES TEMPLATE SHOWCASE SECTION */}
         <div className="max-w-6xl mx-auto mt-20">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <span className="text-xs font-bold uppercase tracking-widest text-amber-700 block mb-1">
-              ជ្រើសរើសម៉ូតគំរូស្រេចៗ (Pre-made Templates)
+              ជម្រើសម៉ូតជាច្រើន (Many Choices & Global Themes)
             </span>
             <h2 className="font-khmer-koulen text-2xl sm:text-3xl text-slate-900 tracking-wide">
-              ម៉ូតសំបុត្រការខ្មែរជាច្រើនជម្រើស (Khmer Wedding Templates)
+              កម្រងម៉ូតសំបុត្រមង្គលការទូទាំងពិភពលោក (Wedding Collection)
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              ចុចលើម៉ូតណាមួយដើម្បីមើលសំបុត្រអញ្ជើញផ្ទាល់ ឬកែសម្រួលសម្រាប់មង្គលការរបស់លោកអ្នក
-            </p>
           </div>
 
+          {/* Category Filter Pills */}
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-amber-700 text-white shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Templates Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templatesList.map((tmpl) => (
+            {filteredTemplates.map((tmpl) => (
               <div
                 key={tmpl.id}
-                className="bg-white rounded-3xl p-6 border-2 border-amber-200/80 shadow-md hover:shadow-xl hover:border-amber-400 transition-all duration-300 flex flex-col justify-between group"
+                className="bg-white rounded-3xl p-6 border-2 border-slate-200/80 shadow-md hover:shadow-xl hover:border-amber-400 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-950 border border-amber-300">
                       {tmpl.badge}
                     </span>
-                    <span className="text-xs text-slate-400 font-serif italic">Khmer Theme</span>
+                    <span className="text-xs text-slate-400 font-serif italic">{tmpl.category}</span>
                   </div>
 
-                  <h3 className="font-khmer-koulen text-lg text-slate-900 mb-1 group-hover:text-amber-800 transition-colors">
-                    {tmpl.titleKhmer}
+                  <h3 className="font-bold text-base text-slate-900 mb-1 group-hover:text-amber-800 transition-colors">
+                    {tmpl.title}
                   </h3>
                   <p className="text-xs font-bold text-amber-700 mb-3">
                     {tmpl.couple}
@@ -193,7 +232,7 @@ export default function HomePage() {
                   <Link
                     href={`/invite/${tmpl.id}`}
                     target="_blank"
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition-colors border border-amber-200"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-amber-50 text-slate-800 font-bold text-xs transition-colors border border-slate-200"
                   >
                     <span>មើលសំបុត្រ</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -203,7 +242,7 @@ export default function HomePage() {
                     href={`/dashboard/builder`}
                     className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs transition-colors shadow-xs"
                   >
-                    <span>ជ្រើសរើសម៉ូតនេះ</span>
+                    <span>កែសម្រួល</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -212,58 +251,58 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Feature Highlights Grid */}
+        {/* Worldwide Highlights Grid */}
         <div className="max-w-6xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {/* Card 1: Telegram & WhatsApp */}
-          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-amber-200 shadow-sm hover:shadow-md transition-all">
+          {/* Card 1: Multi-language & Global Sharing */}
+          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
             <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center mb-5 border border-sky-200">
-              <Send className="w-6 h-6" />
+              <Globe className="w-6 h-6" />
             </div>
-            <h3 className="font-khmer-koulen text-xl text-slate-900 mb-2 tracking-wide">
-              ផ្ញើ Telegram & WhatsApp ១-Click
+            <h3 className="font-bold text-lg text-slate-900 mb-2">
+              ពហុភាសា (5 Languages) & Global Sharing
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              ប្រព័ន្ធបង្កើតតំណភ្ជាប់ឈ្មោះភ្ញៀវផ្ទាល់ខ្លួន និងសារអញ្ជើញជាភាសាខ្មែរត្រឹមត្រូវ រួចបើកកម្មវិធី Telegram ឬ WhatsApp ផ្ញើចេញភ្លាមៗ។
+              Supports Khmer (ភាសាខ្មែរ), English, French, Chinese, and Bahasa with 1-click instant sharing to Telegram, WhatsApp, Messenger, and Email.
             </p>
           </div>
 
-          {/* Card 2: Traditional Music & Wax Seal */}
-          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-amber-200 shadow-sm hover:shadow-md transition-all">
+          {/* Card 2: Music & Opening Animation */}
+          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-800 flex items-center justify-center mb-5 border border-amber-200">
               <Music className="w-6 h-6" />
             </div>
-            <h3 className="font-khmer-koulen text-xl text-slate-900 mb-2 tracking-wide">
-              ភ្លេងការខ្មែរ & បើកសំបុត្ររ៉ូមែនទិក
+            <h3 className="font-bold text-lg text-slate-900 mb-2">
+              ភ្លេងការ & Curated Music Library
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              ភ្ញៀវទទួលបានអារម្មណ៍រំភើបជាមួយការបើកស្រោមសំបុត្រមង្គលការ បាញ់ផ្កាក្រដាស Confetti និងភ្លេងការប្រពៃណីខ្មែរបន្លឺឡើងដោយស្វ័យប្រវត្តិ។
+              Choice of traditional Khmer Phleng Kar, Canon in D, romantic acoustic guitars, lo-fi sunsets, or custom soundtrack URLs with spinning vinyl disc.
             </p>
           </div>
 
-          {/* Card 3: ABA KHQR & RSVP */}
-          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-amber-200 shadow-sm hover:shadow-md transition-all">
+          {/* Card 3: Worldwide Cashless & KHQR */}
+          <div className="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center mb-5 border border-emerald-200">
               <CreditCard className="w-6 h-6" />
             </div>
-            <h3 className="font-khmer-koulen text-xl text-slate-900 mb-2 tracking-wide">
-              ស្កេន ABA KHQR & កត់ត្រាភ្ញៀវ RSVP
+            <h3 className="font-bold text-lg text-slate-900 mb-2">
+              ABA KHQR, PayPal & Worldwide Gifting
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              បង្កភាពងាយស្រួលដល់ភ្ញៀវចងដៃតាមរយៈ Bakong KHQR (ABA, Wing, ACLEDA) និងតាមដានចំនួនតុ-ចំនួនភ្ញៀវចូលរួមយ៉ាងជាក់លាក់។
+              Accept wedding gifts effortlessly through ABA KHQR (Bakong), PayPal, Wise multi-currency, Zelle, Venmo, or direct bank wire with 1-click copy.
             </p>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto py-10 bg-[#FFFDF7] border-t border-amber-200/80 text-center text-xs text-slate-500 font-khmer">
+      <footer className="mt-auto py-10 bg-[#FFFDF7] border-t border-slate-200 text-center text-xs text-slate-500 font-khmer">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Heart className="w-4 h-4 text-amber-600 fill-current" />
-            <span className="font-bold text-slate-800">សំបុត្រការឌីជីថល (Khmer Digital Wedding)</span>
-            <span>— រក្សាសិទ្ធិគ្រប់យ៉ាង</span>
+            <span className="font-bold text-slate-800">សំបុត្រការឌីជីថល (Global & Khmer Digital Wedding)</span>
+            <span>— Worldwide Platform</span>
           </div>
-          <p>© 2026 Khmer Digital Wedding Platform. All rights reserved.</p>
+          <p>© 2026 Global Digital Wedding Platform. All rights reserved.</p>
         </div>
       </footer>
     </div>

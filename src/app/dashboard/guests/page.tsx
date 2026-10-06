@@ -17,7 +17,8 @@ import {
   Send,
   CheckCircle2,
   Clock,
-  XCircle
+  XCircle,
+  Mail
 } from 'lucide-react';
 
 export default function GuestsPage() {
@@ -279,10 +280,19 @@ export default function GuestsPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all"
-                              title="ផ្ញើតាម WhatsApp"
+                              title="Send via WhatsApp"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
                               <span className="hidden sm:inline">WhatsApp</span>
+                            </a>
+
+                            {/* Email Button */}
+                            <a
+                              href={`mailto:${guest.email || ''}?subject=${encodeURIComponent(`Wedding Invitation: ${data.title}`)}&body=${encodeURIComponent(`Dear ${guest.name},\n\nYou are cordially invited to celebrate our wedding!\n\nPlease open your personalized digital invitation here:\n${personalizedUrl}\n\nWarm regards,\n${data.title}`)}`}
+                              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs shadow-xs transition-all"
+                              title="Send via Email"
+                            >
+                              <Mail className="w-3.5 h-3.5" />
                             </a>
 
                             {/* Delete */}

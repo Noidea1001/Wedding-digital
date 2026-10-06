@@ -7,6 +7,8 @@ import { getWeddingData, saveWeddingData } from '@/lib/storage';
 import { WeddingInvitationData, WeddingTheme } from '@/types/wedding';
 import { DEFAULT_WEDDING, ALL_PRESET_WEDDINGS } from '@/lib/mockData';
 import { THEME_CONFIGS } from '@/lib/themes';
+import { SOUNDTRACK_PRESETS } from '@/lib/soundtracks';
+import { SupportedLocale } from '@/lib/i18n';
 import {
   Save,
   Check,
@@ -22,7 +24,9 @@ import {
   Palette,
   Plus,
   Trash2,
-  Sparkles
+  Sparkles,
+  Music,
+  Globe
 } from 'lucide-react';
 
 export default function BuilderPage() {
@@ -31,6 +35,7 @@ export default function BuilderPage() {
   const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
   const [saveToast, setSaveToast] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [themeFilter, setThemeFilter] = useState<string>('All');
 
   useEffect(() => {
     setIsClient(true);
@@ -55,7 +60,7 @@ export default function BuilderPage() {
   };
 
   const handleReset = () => {
-    if (confirm('តើអ្នកពិតជាចង់កំណត់ទិន្នន័យឡើងវិញទៅគំរូដើមមែនទេ?')) {
+    if (confirm('តើអ្នកពិតជាចង់កំណត់ទិន្នន័យឡើងវិញទៅគំរូដើមមែនទេ? (Reset to default?)')) {
       setData(DEFAULT_WEDDING);
       saveWeddingData(DEFAULT_WEDDING);
     }
@@ -87,33 +92,52 @@ export default function BuilderPage() {
     setData(prev => ({ ...prev, theme }));
   };
 
-  const presetsNav = [
-    { slug: 'visal-thida', label: 'រាជវង្សបុរាណ (Royal Gold)' },
-    { slug: 'dara-bopha', label: 'ផ្កាឈូកអង្គរ (Angkor Lotus)' },
-    { slug: 'ratanak-socheata', label: 'ត្បូងមរកត (Emerald Jade)' },
-    { slug: 'seyha-muniroth', label: 'រាត្រីតារា (Midnight Star)' },
-    { slug: 'vibol-devi', label: 'សូត្រខ្មែរ (Silk & Amber)' },
+  const handleSelectSoundtrack = (st: typeof SOUNDTRACK_PRESETS[0]) => {
+    setData(prev => ({
+      ...prev,
+      soundtrack: {
+        title: st.title,
+        artist: st.artist,
+        audioUrl: st.audioUrl
+      }
+    }));
+  };
+
+  const worldwidePresets = [
+    { slug: 'visal-thida', label: '🇰🇭 វិសាល & ធីតា (Khmer Royal Gold)' },
+    { slug: 'dara-bopha', label: '🇰🇭 ដារ៉ា & បុប្ផា (Angkor Lotus)' },
+    { slug: 'julien-charlotte', label: '🇫🇷 Julien & Charlotte (Paris French Rose)' },
+    { slug: 'alexander-victoria', label: '🇺🇸 Alexander & Victoria (NYC Black Tie)' },
+    { slug: 'oliver-sophia', label: '🇮🇹 Oliver & Sophia (Tuscany Sage Botanical)' },
+    { slug: 'leo-maya', label: '🌴 Leo & Maya (Tropical Beach Sunset)' }
   ];
+
+  const allThemes = Object.keys(THEME_CONFIGS) as WeddingTheme[];
+  const themeCategories = ['All', 'Khmer Heritage', 'Modern Luxury', 'Romantic Floral', 'Boho & Nature', 'Minimalist'];
+
+  const filteredThemes = themeFilter === 'All'
+    ? allThemes
+    : allThemes.filter((t) => THEME_CONFIGS[t].category === themeFilter);
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col font-khmer">
       <DashboardNavbar />
 
-      {/* Preset Templates Quick Switcher Bar */}
-      <div className="bg-amber-900 text-white px-4 sm:px-8 py-2.5 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
-        <span className="font-bold whitespace-nowrap text-amber-300 flex items-center gap-1.5">
+      {/* Worldwide Preset Templates Bar */}
+      <div className="bg-slate-900 text-white px-4 sm:px-8 py-2.5 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
+        <span className="font-bold whitespace-nowrap text-amber-400 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>ផ្ទុកម៉ូតគំរូ (Load Template):</span>
+          <span>ម៉ូតគំរូពិភពលោក (Presets):</span>
         </span>
         <div className="flex items-center gap-1.5">
-          {presetsNav.map((p) => (
+          {worldwidePresets.map((p) => (
             <button
               key={p.slug}
               onClick={() => handleLoadPreset(p.slug)}
               className={`whitespace-nowrap px-3 py-1 rounded-full font-bold transition-all ${
                 data.slug === p.slug
                   ? 'bg-amber-400 text-amber-950 shadow-xs'
-                  : 'bg-amber-950/60 hover:bg-amber-800 text-amber-100'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
               }`}
             >
               {p.label}
@@ -125,8 +149,8 @@ export default function BuilderPage() {
       {/* Builder Subheader */}
       <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-20 shadow-xs">
         <div className="flex items-center gap-3">
-          <span className="font-khmer-koulen text-slate-800 text-xl tracking-wide">
-            កែសម្រួលសំបុត្រមង្គលការ (Editor)
+          <span className="font-bold text-slate-900 text-lg">
+            កែសម្រួលសំបុត្រ (Builder & Customizer)
           </span>
           <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-950 font-bold">
             Live Preview
@@ -158,7 +182,7 @@ export default function BuilderPage() {
 
           <button
             onClick={handleReset}
-            title="កំណត់ឡើងវិញ (Reset)"
+            title="Reset to default"
             className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all"
           >
             <RefreshCw className="w-4 h-4" />
@@ -181,12 +205,12 @@ export default function BuilderPage() {
           {/* Editor Tabs */}
           <div className="flex items-center gap-1 border-b border-slate-100 pb-3 overflow-x-auto scrollbar-none mb-6">
             {[
-              { id: 'couple', label: 'មង្គលការ', icon: Heart },
-              { id: 'events', label: 'កម្មវិធីបុណ្យ', icon: Calendar },
-              { id: 'story', label: 'ប្រវត្តិស្នេហ៍', icon: BookOpen },
-              { id: 'gallery', label: 'រូបថត', icon: ImageIcon },
-              { id: 'gifts', label: 'ចងដៃ KHQR', icon: Gift },
-              { id: 'theme', label: 'ម៉ូត & ភ្លេងការ', icon: Palette },
+              { id: 'couple', label: 'មង្គលការ (Couple)', icon: Heart },
+              { id: 'events', label: 'កម្មវិធីបុណ្យ (Events)', icon: Calendar },
+              { id: 'story', label: 'ប្រវត្តិស្នេហ៍ (Story)', icon: BookOpen },
+              { id: 'gallery', label: 'រូបថត (Gallery)', icon: ImageIcon },
+              { id: 'gifts', label: 'ចំណងដៃ (Gifts & KHQR)', icon: Gift },
+              { id: 'theme', label: 'ម៉ូត & ភ្លេង (Themes & Music)', icon: Palette },
             ].map((tab) => {
               const Icon = tab.icon;
               const isCurrent = activeTab === tab.id;
@@ -194,7 +218,7 @@ export default function BuilderPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                     isCurrent
                       ? 'bg-amber-50 text-amber-950 border border-amber-300'
                       : 'text-slate-600 hover:bg-slate-50'
@@ -212,21 +236,39 @@ export default function BuilderPage() {
             {/* 1. COUPLE TAB */}
             {activeTab === 'couple' && (
               <div className="space-y-6 animate-fadeIn">
-                <h4 className="font-khmer-koulen text-lg text-amber-900 border-b border-slate-100 pb-2">
-                  ព័ត៌មានកូនកំលោះ (Groom Profile)
-                </h4>
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <h4 className="font-bold text-base text-slate-900">
+                    ព័ត៌មានកូនកំលោះ (Groom Information)
+                  </h4>
+                  {/* Language selector */}
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <Globe className="w-3.5 h-3.5 text-slate-400" />
+                    <select
+                      value={data.locale || 'km'}
+                      onChange={(e) => setData(prev => ({ ...prev, locale: e.target.value as SupportedLocale }))}
+                      className="px-2 py-1 rounded-lg border border-slate-200 text-xs bg-white font-bold"
+                    >
+                      <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
+                      <option value="en">🇬🇧 English (Global)</option>
+                      <option value="fr">🇫🇷 Français (French)</option>
+                      <option value="zh">🇨🇳 中文 (Chinese)</option>
+                      <option value="id">🇮🇩 Bahasa Indonesia</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះពេញជាភាសាខ្មែរ *</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះកូនកំលោះ (Full Name) *</label>
                     <input
                       type="text"
-                      value={data.groom.fullNameKhmer || ''}
+                      value={data.groom.fullNameKhmer || data.groom.fullName}
                       onChange={(e) => updateGroom('fullNameKhmer', e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះជាអក្សរឡាតាំង (Latin Name)</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះឡាតាំង (English Name)</label>
                     <input
                       type="text"
                       value={data.groom.fullName}
@@ -249,12 +291,12 @@ export default function BuilderPage() {
                       type="text"
                       value={data.groom.childOrderTextKhmer || data.groom.childOrderText}
                       onChange={(e) => updateGroom('childOrderTextKhmer', e.target.value)}
-                      placeholder="ឧ. កូនប្រុសច្បង"
+                      placeholder="e.g. Eldest Son of / កូនប្រុសច្បង"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះលោកឪពុក</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះឪពុក (Father's Name)</label>
                     <input
                       type="text"
                       value={data.groom.fatherNameKhmer || data.groom.fatherName}
@@ -263,7 +305,7 @@ export default function BuilderPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះអ្នកម្តាយ</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះម្តាយ (Mother's Name)</label>
                     <input
                       type="text"
                       value={data.groom.motherNameKhmer || data.groom.motherName}
@@ -272,7 +314,7 @@ export default function BuilderPage() {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនកំលោះ</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនកំលោះ (Photo URL)</label>
                     <input
                       type="text"
                       value={data.groom.photoUrl}
@@ -280,32 +322,23 @@ export default function BuilderPage() {
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Telegram (@username)</label>
-                    <input
-                      type="text"
-                      value={data.groom.telegram || ''}
-                      onChange={(e) => updateGroom('telegram', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
-                    />
-                  </div>
                 </div>
 
-                <h4 className="font-khmer-koulen text-lg text-amber-900 border-b border-slate-100 pb-2 pt-4">
-                  ព័ត៌មានកូនក្រមុំ (Bride Profile)
+                <h4 className="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 pt-4">
+                  ព័ត៌មានកូនក្រមុំ (Bride Information)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះពេញជាភាសាខ្មែរ *</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះកូនក្រមុំ (Full Name) *</label>
                     <input
                       type="text"
-                      value={data.bride.fullNameKhmer || ''}
+                      value={data.bride.fullNameKhmer || data.bride.fullName}
                       onChange={(e) => updateBride('fullNameKhmer', e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះជាអក្សរឡាតាំង (Latin Name)</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះឡាតាំង (English Name)</label>
                     <input
                       type="text"
                       value={data.bride.fullName}
@@ -328,12 +361,12 @@ export default function BuilderPage() {
                       type="text"
                       value={data.bride.childOrderTextKhmer || data.bride.childOrderText}
                       onChange={(e) => updateBride('childOrderTextKhmer', e.target.value)}
-                      placeholder="ឧ. កូនស្រីទី២"
+                      placeholder="e.g. Second Daughter of / កូនស្រីទី២"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះលោកឪពុក</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះឪពុក (Father's Name)</label>
                     <input
                       type="text"
                       value={data.bride.fatherNameKhmer || data.bride.fatherName}
@@ -342,7 +375,7 @@ export default function BuilderPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះអ្នកម្តាយ</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះម្តាយ (Mother's Name)</label>
                     <input
                       type="text"
                       value={data.bride.motherNameKhmer || data.bride.motherName}
@@ -351,20 +384,11 @@ export default function BuilderPage() {
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនក្រមុំ</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនក្រមុំ (Photo URL)</label>
                     <input
                       type="text"
                       value={data.bride.photoUrl}
                       onChange={(e) => updateBride('photoUrl', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Telegram (@username)</label>
-                    <input
-                      type="text"
-                      value={data.bride.telegram || ''}
-                      onChange={(e) => updateBride('telegram', e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
@@ -378,11 +402,11 @@ export default function BuilderPage() {
                 {data.events.map((event, index) => (
                   <div key={event.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
                     <h5 className="font-bold text-slate-800 text-sm flex items-center justify-between">
-                      <span>កម្មវិធីទី #{index + 1}: {event.titleKhmer || event.title}</span>
+                      <span>Event #{index + 1}: {event.titleKhmer || event.title}</span>
                     </h5>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ឈ្មោះកម្មវិធី (Khmer Title)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Event Title</label>
                         <input
                           type="text"
                           value={event.titleKhmer || event.title}
@@ -391,27 +415,25 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">កាលបរិច្ឆេទជាអក្សរខ្មែរ</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Date (YYYY-MM-DD)</label>
                         <input
-                          type="text"
-                          value={event.dateKhmer || event.date}
-                          onChange={(e) => updateEvent(index, 'dateKhmer', e.target.value)}
-                          placeholder="ឧ. ថ្ងៃសៅរ៍ ទី២៨ ខែវិច្ឆិកា ឆ្នាំ២០២៦"
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
+                          type="date"
+                          value={event.date}
+                          onChange={(e) => updateEvent(index, 'date', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ពេលវេលា (Time)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Time (e.g. 08:00 - 11:30)</label>
                         <input
                           type="text"
                           value={event.startTime}
                           onChange={(e) => updateEvent(index, 'startTime', e.target.value)}
-                          placeholder="ឧ. 07:00 ព្រឹក"
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ទីតាំងកម្មវិធី (Venue Name)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Venue Name</label>
                         <input
                           type="text"
                           value={event.venueName}
@@ -420,7 +442,7 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">អាសយដ្ឋានលម្អិត (Address)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Full Address</label>
                         <input
                           type="text"
                           value={event.address}
@@ -429,7 +451,7 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">តំណភ្ជាប់ Google Maps Link</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Google Maps Link</label>
                         <input
                           type="text"
                           value={event.mapsUrl}
@@ -447,8 +469,8 @@ export default function BuilderPage() {
             {activeTab === 'story' && (
               <div className="space-y-4 animate-fadeIn">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-khmer-koulen text-lg text-amber-900">
-                    ប្រវត្តិដំណើររឿងស្នេហ៍
+                  <h4 className="font-bold text-base text-slate-900">
+                    Love Story Milestones
                   </h4>
                   <button
                     onClick={() => {
@@ -458,10 +480,9 @@ export default function BuilderPage() {
                           ...prev.loveStories,
                           {
                             id: `story-${Date.now()}`,
-                            year: '២០២៦',
-                            title: 'អនុស្សាវរីយ៍ថ្មី',
-                            titleKhmer: 'អនុស្សាវរីយ៍ថ្មី',
-                            description: 'រឿងរ៉ាវស្នេហា...',
+                            year: '2026',
+                            title: 'New Milestone',
+                            description: 'Our love story narrative...',
                             imageUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800'
                           }
                         ]
@@ -470,7 +491,7 @@ export default function BuilderPage() {
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>បន្ថែមអនុស្សាវរីយ៍</span>
+                    <span>Add Milestone</span>
                   </button>
                 </div>
 
@@ -489,7 +510,7 @@ export default function BuilderPage() {
                     </button>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ឆ្នាំ</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">Year</label>
                         <input
                           type="text"
                           value={story.year}
@@ -505,7 +526,7 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ចំណងជើង</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">Title</label>
                         <input
                           type="text"
                           value={story.titleKhmer || story.title}
@@ -513,6 +534,7 @@ export default function BuilderPage() {
                             const val = e.target.value;
                             setData(prev => {
                               const s = [...prev.loveStories];
+                              s[idx].title = val;
                               s[idx].titleKhmer = val;
                               return { ...prev, loveStories: s };
                             });
@@ -521,7 +543,7 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div className="sm:col-span-3">
-                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ការរៀបរាប់</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">Description</label>
                         <textarea
                           rows={2}
                           value={story.description}
@@ -546,8 +568,8 @@ export default function BuilderPage() {
             {activeTab === 'gallery' && (
               <div className="space-y-4 animate-fadeIn">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-khmer-koulen text-lg text-amber-900">
-                    រូបថតអនុស្សាវរីយ៍ ({data.gallery.length} សន្លឹក)
+                  <h4 className="font-bold text-base text-slate-900">
+                    Wedding Photo Gallery ({data.gallery.length} Photos)
                   </h4>
                   <button
                     onClick={() => {
@@ -566,7 +588,7 @@ export default function BuilderPage() {
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>បន្ថែមរូបថត</span>
+                    <span>Add Photo</span>
                   </button>
                 </div>
 
@@ -627,14 +649,77 @@ export default function BuilderPage() {
             {/* 5. GIFTS TAB */}
             {activeTab === 'gifts' && (
               <div className="space-y-4 animate-fadeIn">
-                <h4 className="font-khmer-koulen text-lg text-amber-900">
-                  ចំណងដៃ KHQR & គណនីធនាគារ (Cambodian KHQR)
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold text-base text-slate-900">
+                    Worldwide Gifts & Cashless Registry
+                  </h4>
+                  <button
+                    onClick={() => {
+                      setData(prev => ({
+                        ...prev,
+                        gifts: [
+                          ...prev.gifts,
+                          {
+                            id: `gift-${Date.now()}`,
+                            type: 'paypal',
+                            providerName: 'PayPal Worldwide',
+                            accountNumber: 'paypal.me/yourusername',
+                            accountHolder: 'Your Name',
+                            note: 'Direct digital gift'
+                          }
+                        ]
+                      }));
+                    }}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Payment</span>
+                  </button>
+                </div>
+
                 {data.gifts.map((gift, idx) => (
-                  <div key={gift.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div key={gift.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 relative">
+                    <button
+                      onClick={() => {
+                        setData(prev => ({
+                          ...prev,
+                          gifts: prev.gifts.filter((_, i) => i !== idx)
+                        }));
+                      }}
+                      className="absolute top-3 right-3 text-slate-400 hover:text-red-600"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ធនាគារ (Bank Name)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Provider Type</label>
+                        <select
+                          value={gift.type}
+                          onChange={(e) => {
+                            const val = e.target.value as any;
+                            setData(prev => {
+                              const g = [...prev.gifts];
+                              g[idx].type = val;
+                              return { ...prev, gifts: g };
+                            });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-bold"
+                        >
+                          <option value="aba_khqr">🇰🇭 ABA Bank KHQR (Bakong)</option>
+                          <option value="wing_khqr">🇰🇭 Wing Bank KHQR</option>
+                          <option value="acleda_khqr">🇰🇭 ACLEDA Bank KHQR</option>
+                          <option value="paypal">🌐 PayPal Global</option>
+                          <option value="wise">🌐 Wise Multi-Currency</option>
+                          <option value="zelle">🇺🇸 Zelle Pay (US)</option>
+                          <option value="venmo">🇺🇸 Venmo</option>
+                          <option value="bank">🏦 Bank Wire / IBAN</option>
+                          <option value="gift_address">📦 Physical Gift Address</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Display Label</label>
                         <input
                           type="text"
                           value={gift.providerName}
@@ -649,8 +734,9 @@ export default function BuilderPage() {
                           className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
                         />
                       </div>
+
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">លេខគណនី (Account No)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Account No. / Handle</label>
                         <input
                           type="text"
                           value={gift.accountNumber}
@@ -665,22 +751,6 @@ export default function BuilderPage() {
                           className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-mono"
                         />
                       </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ឈ្មោះម្ចាស់គណនី</label>
-                        <input
-                          type="text"
-                          value={gift.accountHolder}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            setData(prev => {
-                              const g = [...prev.gifts];
-                              g[idx].accountHolder = val;
-                              return { ...prev, gifts: g };
-                            });
-                          }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-bold"
-                        />
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -691,11 +761,31 @@ export default function BuilderPage() {
             {activeTab === 'theme' && (
               <div className="space-y-6 animate-fadeIn">
                 <div>
-                  <h4 className="font-khmer-koulen text-lg text-amber-900 mb-3">
-                    ជ្រើសរើសម៉ូតសំបុត្រការខ្មែរ (Khmer Wedding Themes)
-                  </h4>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-bold text-base text-slate-900">
+                      Choose From 12 Worldwide Wedding Themes
+                    </h4>
+                  </div>
+
+                  {/* Category filters */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 scrollbar-none">
+                    {themeCategories.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setThemeFilter(c)}
+                        className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                          themeFilter === c
+                            ? 'bg-amber-700 text-white'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(Object.keys(THEME_CONFIGS) as WeddingTheme[]).map((themeKey) => {
+                    {filteredThemes.map((themeKey) => {
                       const cfg = THEME_CONFIGS[themeKey];
                       const isSelected = data.theme === themeKey;
                       return (
@@ -709,8 +799,8 @@ export default function BuilderPage() {
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-xs text-slate-900 block font-khmer">{cfg.nameKhmer}</span>
-                            <span className="text-[10px] text-slate-400 capitalize">{cfg.name}</span>
+                            <span className="font-bold text-xs text-slate-900 block">{cfg.name}</span>
+                            <span className="text-[10px] text-slate-400 font-normal">{cfg.description}</span>
                           </div>
                           {isSelected && (
                             <div className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center font-bold text-xs">
@@ -723,56 +813,54 @@ export default function BuilderPage() {
                   </div>
                 </div>
 
+                {/* Music Library Presets */}
                 <div className="pt-4 border-t border-slate-100">
-                  <h4 className="font-khmer-koulen text-lg text-amber-900 mb-3">
-                    ភ្លេងការខ្មែរប្រពៃណី (Wedding Audio Soundtrack)
+                  <h4 className="font-bold text-base text-slate-900 mb-2 flex items-center gap-2">
+                    <Music className="w-4 h-4 text-amber-600" />
+                    <span>Curated Wedding Soundtracks</span>
                   </h4>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1">ចំណងជើងបទភ្លេង</label>
-                      <input
-                        type="text"
-                        value={data.soundtrack.title}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setData(prev => ({
-                            ...prev,
-                            soundtrack: { ...prev.soundtrack, title: val }
-                          }));
-                        }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-khmer"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1">អ្នកច្រៀង / ភ្លេងការ</label>
-                      <input
-                        type="text"
-                        value={data.soundtrack.artist}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setData(prev => ({
-                            ...prev,
-                            soundtrack: { ...prev.soundtrack, artist: val }
-                          }));
-                        }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-khmer"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-600 mb-1">តំណភ្ជាប់ឯកសារ MP3 (Direct Audio URL)</label>
-                      <input
-                        type="text"
-                        value={data.soundtrack.audioUrl}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setData(prev => ({
-                            ...prev,
-                            soundtrack: { ...prev.soundtrack, audioUrl: val }
-                          }));
-                        }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-mono"
-                      />
-                    </div>
+                  <p className="text-xs text-slate-500 mb-3">
+                    Pick a romantic melody from our royalty-free wedding music catalog:
+                  </p>
+
+                  <div className="space-y-2 mb-4">
+                    {SOUNDTRACK_PRESETS.map((st) => (
+                      <button
+                        key={st.id}
+                        type="button"
+                        onClick={() => handleSelectSoundtrack(st)}
+                        className={`w-full p-2.5 rounded-xl border text-left flex items-center justify-between text-xs transition-all ${
+                          data.soundtrack.audioUrl === st.audioUrl
+                            ? 'bg-amber-50 border-amber-400 text-amber-950 font-bold'
+                            : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
+                        }`}
+                      >
+                        <div>
+                          <span>{st.title}</span>
+                          <span className="block text-[10px] text-slate-400 font-normal">{st.artist} • {st.category}</span>
+                        </div>
+                        {data.soundtrack.audioUrl === st.audioUrl && (
+                          <span className="text-amber-700 font-bold">Selected ✓</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Custom audio link */}
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <label className="block text-xs font-bold text-slate-600 mb-1">Or Paste Custom Audio MP3 URL:</label>
+                    <input
+                      type="text"
+                      value={data.soundtrack.audioUrl}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setData(prev => ({
+                          ...prev,
+                          soundtrack: { ...prev.soundtrack, audioUrl: val }
+                        }));
+                      }}
+                      className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-mono"
+                    />
                   </div>
                 </div>
               </div>
@@ -784,7 +872,7 @@ export default function BuilderPage() {
         <div className="lg:col-span-6 flex flex-col items-center justify-center">
           <div className="w-full flex items-center justify-between mb-3 px-2">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-              ទិដ្ឋភាពជាក់ស្តែង (Live Preview)
+              Live Interactive Preview
             </span>
             <a
               href={`/invite/${data.slug}`}
@@ -792,7 +880,7 @@ export default function BuilderPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 hover:underline"
             >
-              <span>បើកផ្ទាំងថ្មី (Open Tab)</span>
+              <span>Open in New Tab</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -814,7 +902,7 @@ export default function BuilderPage() {
               {isClient && (
                 <WeddingInvitationView
                   data={data}
-                  guestName="ភ្ញៀវកិត្តិយស (Preview)"
+                  guestName="Honored Guest (Preview)"
                   allowThemeSwitching={true}
                 />
               )}

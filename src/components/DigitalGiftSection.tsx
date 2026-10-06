@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Gift, CreditCard, Copy, Check, QrCode, Sparkles } from 'lucide-react';
+import { Gift, CreditCard, Copy, Check, QrCode, Globe, MapPin } from 'lucide-react';
 import { DigitalGift } from '@/types/wedding';
 import { ThemeConfig } from '@/lib/themes';
 
@@ -27,69 +27,79 @@ export default function DigitalGiftSection({ gifts, themeConfig }: DigitalGiftSe
     <section id="gift" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12 font-khmer">
       <div className="text-center mb-14">
         <h2 className="font-khmer-moul text-xl sm:text-2xl text-amber-900 mb-2">
-          ចំណងដៃអាពាហ៍ពិពាហ៍ (Digital Gift)
+          ចំណងដៃអាពាហ៍ពិពាហ៍ (Wedding Gift & Registry)
         </h2>
         <span className="text-xs uppercase tracking-[0.25em] font-semibold text-slate-400 block mb-3">
-          KHQR & Cashless Blessing
+          Worldwide Cashless & KHQR Blessing
         </span>
         <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-          វត្តមាន និងពរជ័យដ៏ថ្លៃថ្លារបស់លោកអ្នក គឺជាកាដូដ៏មានតម្លៃបំផុតសម្រាប់យើងខ្ញុំ។ ប្រសិនបើលោកអ្នកមានបំណងចងដៃតាមប្រព័ន្ធឌីជីថល លោកអ្នកអាចស្កេន KHQR ខាងក្រោមបាន៖
+          វត្តមាន និងពរជ័យដ៏ថ្លៃថ្លារបស់លោកអ្នក គឺជាកាដូដ៏មានតម្លៃបំផុតសម្រាប់យើងខ្ញុំ។ ប្រសិនបើលោកអ្នកមានបំណងចងដៃតាមប្រព័ន្ធឌីជីថល (KHQR, PayPal, Wise, Zelle, Bank Wire)៖
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
         {gifts.map((gift) => {
           const isCopied = copiedId === gift.id;
-          const isABA = gift.providerName.toLowerCase().includes('aba');
+          const isKHQR = gift.type === 'aba_khqr' || gift.type === 'wing_khqr' || gift.type === 'acleda_khqr';
+          const isAddress = gift.type === 'gift_address';
+          const isPayPal = gift.type === 'paypal';
+          const isWise = gift.type === 'wise';
+          const isZelle = gift.type === 'zelle';
 
           return (
             <div
               key={gift.id}
               className={`p-6 rounded-3xl ${themeConfig.cardBg} flex flex-col justify-between border-2 ${
-                isABA ? 'border-sky-400 shadow-md bg-white' : 'border-amber-200/90 shadow-sm'
+                isKHQR ? 'border-amber-300 shadow-md' : 'border-slate-200/90 shadow-sm'
               } hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
             >
-              {/* KHQR Header Ribbon */}
+              {/* Header Ribbon */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs ${
-                    isABA ? 'bg-sky-600 text-white' : 'bg-amber-100 text-amber-900'
+                    isKHQR ? 'bg-amber-600 text-white' : isPayPal ? 'bg-blue-600 text-white' : isWise ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-white'
                   }`}>
-                    <QrCode className="w-5 h-5" />
+                    {isKHQR ? <QrCode className="w-5 h-5" /> : isAddress ? <MapPin className="w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900 text-xs sm:text-sm">
+                    <h3 className="font-bold text-slate-900 text-xs sm:text-sm truncate max-w-[170px]">
                       {gift.providerName}
                     </h3>
-                    <span className="text-[10px] text-red-600 font-bold uppercase tracking-wider">
-                      ● KHQR Bakong
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      {isKHQR ? 'KHQR Bakong' : isPayPal ? 'PayPal Global' : isWise ? 'Wise Transfer' : isZelle ? 'Zelle Pay' : 'Direct Transfer'}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* KHQR visual badge */}
+              {/* Account Detail Box */}
               <div className="my-2 p-4 rounded-2xl bg-gradient-to-b from-slate-50 to-amber-50/40 border border-slate-200/70 text-center flex flex-col items-center">
-                {/* Mock QR graphic */}
-                <div className="w-28 h-28 bg-white p-2 rounded-xl shadow-xs border border-slate-200 flex flex-col items-center justify-center relative mb-2">
-                  <div className="absolute top-1 right-1 bg-red-600 text-white text-[8px] font-bold px-1 rounded">
-                    KHQR
+                {isKHQR && (
+                  <div className="w-24 h-24 bg-white p-2 rounded-xl shadow-xs border border-slate-200 flex flex-col items-center justify-center relative mb-2">
+                    <div className="absolute top-1 right-1 bg-red-600 text-white text-[7px] font-bold px-1 rounded">
+                      KHQR
+                    </div>
+                    <QrCode className="w-16 h-16 text-slate-800" />
                   </div>
-                  <QrCode className="w-20 h-20 text-slate-800" />
-                </div>
+                )}
 
                 <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                  លេខគណនី (Account No.)
+                  {isAddress ? 'អាសយដ្ឋាន (Address)' : 'លេខគណនី / ID'}
                 </p>
-                <p className="font-mono font-bold text-slate-900 text-sm tracking-wide mt-0.5 select-all">
+                <p className={`font-mono font-bold text-slate-900 tracking-wide mt-0.5 select-all ${isAddress ? 'text-xs text-left' : 'text-sm'}`}>
                   {gift.accountNumber}
                 </p>
                 <p className="text-xs text-amber-950 font-bold mt-1">
-                  {gift.accountHolder}
+                  a.n. {gift.accountHolder}
                 </p>
+                {gift.note && (
+                  <p className="text-[10px] text-slate-500 mt-1 italic">
+                    {gift.note}
+                  </p>
+                )}
               </div>
 
-              {/* Copy Action Button */}
+              {/* Copy / Link Action Button */}
               <div className="pt-2">
                 <button
                   onClick={() => handleCopy(gift.id, gift.accountNumber)}
@@ -102,12 +112,12 @@ export default function DigitalGiftSection({ gifts, themeConfig }: DigitalGiftSe
                   {isCopied ? (
                     <>
                       <Check className="w-4 h-4" />
-                      <span>បានចម្លងរួចរាល់! (Copied)</span>
+                      <span>បានចម្លង! (Copied)</span>
                     </>
                   ) : (
                     <>
                       <Copy className="w-3.5 h-3.5" />
-                      <span>ចម្លងលេខគណនី (Copy Number)</span>
+                      <span>{isAddress ? 'ចម្លងអាសយដ្ឋាន' : 'ចម្លងលេខគណនី (Copy)'}</span>
                     </>
                   )}
                 </button>
