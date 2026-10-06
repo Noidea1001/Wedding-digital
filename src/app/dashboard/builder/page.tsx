@@ -250,9 +250,6 @@ export default function BuilderPage() {
                     >
                       <option value="km">🇰🇭 ភាសាខ្មែរ (Khmer)</option>
                       <option value="en">🇬🇧 English (Global)</option>
-                      <option value="fr">🇫🇷 Français (French)</option>
-                      <option value="zh">🇨🇳 中文 (Chinese)</option>
-                      <option value="id">🇮🇩 Bahasa Indonesia</option>
                     </select>
                   </div>
                 </div>

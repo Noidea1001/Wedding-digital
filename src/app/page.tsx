@@ -115,7 +115,7 @@ export default function HomePage() {
               target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-900 hover:bg-amber-50 transition-all border border-amber-200"
             >
-              <span>Demo Undangan (Live)</span>
+              <span>មើលសំបុត្រគំរូ (Live Demo)</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 
@@ -150,7 +150,7 @@ export default function HomePage() {
           </p>
 
           <p className="text-xs sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Create luxurious, interactive digital wedding invitations with wax seal envelope opening, romantic background music, multi-language support (ភាសាខ្មែរ, English, Français, 中文, Bahasa), 1-click <strong>Telegram & WhatsApp</strong> broadcasts, and instant cashless gifts via <strong>ABA KHQR, PayPal, Wise, and Zelle</strong>.
+            Create luxurious, interactive digital wedding invitations with 3D wax seal golden envelope opening, sweet falling lotus petals, romantic wedding music, strict dual-language support (<strong>ភាសាខ្មែរ & English</strong>), instant sharing, and seamless digital gift registry via <strong>ABA KHQR, PayPal, Wise, and Zelle</strong>.
           </p>
 
           {/* CTA Buttons */}
@@ -259,10 +259,10 @@ export default function HomePage() {
               <Globe className="w-6 h-6" />
             </div>
             <h3 className="font-bold text-lg text-slate-900 mb-2">
-              ពហុភាសា (5 Languages) & Global Sharing
+              ភាសាខ្មែរ & English (Pure Bilingual Dual Mode)
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Supports Khmer (ភាសាខ្មែរ), English, French, Chinese, and Bahasa with 1-click instant sharing to Telegram, WhatsApp, Messenger, and Email.
+              Strict language isolation: When Khmer is selected, enjoy 100% traditional Khmer vocabulary, ceremonies, and numbers. When English is selected, enjoy 100% clean international English with no mixed text.
             </p>
           </div>
 

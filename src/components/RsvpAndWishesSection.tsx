@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Send, CheckCircle2, MessageSquare, HeartHandshake, UserCheck, UserX } from 'lucide-react';
+import { CheckCircle2, HeartHandshake, UserCheck, UserX, MessageSquare } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { WishMessage } from '@/types/wedding';
 import { ThemeConfig } from '@/lib/themes';
+import { SupportedLocale, DICTIONARIES } from '@/lib/i18n';
 import { addWish } from '@/lib/storage';
 
 interface RsvpAndWishesSectionProps {
@@ -12,7 +13,9 @@ interface RsvpAndWishesSectionProps {
   initialWishes: WishMessage[];
   defaultGuestName?: string;
   rsvpDeadlineKhmer?: string;
+  rsvpDeadline?: string;
   themeConfig: ThemeConfig;
+  locale?: SupportedLocale;
 }
 
 export default function RsvpAndWishesSection({
@@ -20,7 +23,9 @@ export default function RsvpAndWishesSection({
   initialWishes,
   defaultGuestName = '',
   rsvpDeadlineKhmer,
-  themeConfig
+  rsvpDeadline,
+  themeConfig,
+  locale = 'km'
 }: RsvpAndWishesSectionProps) {
   const [wishesList, setWishesList] = useState<WishMessage[]>(initialWishes || []);
   const [guestName, setGuestName] = useState(defaultGuestName);
@@ -29,6 +34,9 @@ export default function RsvpAndWishesSection({
   const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isKhmer = locale === 'km';
+  const t = DICTIONARIES[locale] || DICTIONARIES.km;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,27 +70,32 @@ export default function RsvpAndWishesSection({
     }, 400);
   };
 
+  const deadlineText = isKhmer
+    ? (rsvpDeadlineKhmer ? ` មុន${rsvpDeadlineKhmer}` : '')
+    : (rsvpDeadline ? ` before ${rsvpDeadline}` : '');
+
   return (
-    <section id="rsvp" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12 font-khmer">
+    <section id="rsvp" className="py-16 sm:py-24 px-4 max-w-5xl mx-auto scroll-mt-12">
       <div className="text-center mb-14">
-        <h2 className="font-khmer-moul text-xl sm:text-2xl text-amber-900 mb-2">
-          បញ្ជាក់វត្តមាន & សៀវភៅជូនពរ
+        <h2 className={`text-2xl sm:text-3xl text-amber-950 mb-2 ${isKhmer ? 'font-khmer-moul' : 'font-playfair font-bold'}`}>
+          {t.rsvpTitle}
         </h2>
-        <span className="text-xs uppercase tracking-[0.25em] font-semibold text-slate-400 block mb-3">
-          RSVP & Guestbook
+        <span className={`text-xs uppercase tracking-[0.25em] font-bold text-amber-800/70 block mb-3 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+          {isKhmer ? 'ការឆ្លើយតប និងពរជ័យសិរីមង្គល' : 'RSVP & Guestbook'}
         </span>
-        <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-          សូមមេត្តាបញ្ជាក់វត្តមានរបស់លោកអ្នក
-          {rsvpDeadlineKhmer && ` មុនថ្ងៃទី ${rsvpDeadlineKhmer}`} ដើម្បីភាពងាយស្រួលក្នុងការរៀបចំទទួលបដិសណ្ឋារកិច្ច។
+        <p className={`mt-2 text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+          {t.rsvpDesc}{deadlineText}
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* RSVP Form Card */}
-        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-amber-200/90 shadow-md`}>
+        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-[32px] ${themeConfig.cardBg} border-2 border-amber-300/80 shadow-md`}>
           <div className="flex items-center gap-2 mb-6 text-amber-950 font-bold text-base">
             <HeartHandshake className="w-5 h-5 text-amber-600" />
-            <span className="font-khmer-koulen text-lg tracking-wide">ផ្ញើការបញ្ជាក់វត្តមាន & ពរជ័យ</span>
+            <span className={`text-lg tracking-wide ${isKhmer ? 'font-khmer-koulen' : 'font-playfair'}`}>
+              {t.sendRsvp}
+            </span>
           </div>
 
           {isSubmitted ? (
@@ -90,172 +103,165 @@ export default function RsvpAndWishesSection({
               <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-emerald-950 text-base font-khmer-koulen tracking-wide">
-                សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅ!
+              <h4 className={`font-bold text-emerald-950 text-base tracking-wide ${isKhmer ? 'font-khmer-koulen' : 'font-sans'}`}>
+                {t.thankYouMessage}
               </h4>
-              <p className="text-xs text-emerald-800 leading-relaxed">
-                ការបញ្ជាក់វត្តមាន និងពាក្យជូនពរដ៏មានអត្ថន័យរបស់លោកអ្នកត្រូវបានកត់ត្រារួចរាល់ហើយ។
+              <p className={`text-xs text-emerald-800 leading-relaxed ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                {isKhmer
+                  ? 'ការបញ្ជាក់វត្តមាន និងពាក្យជូនពរដ៏មានអត្ថន័យរបស់លោកអ្នកត្រូវបានកត់ត្រារួចរាល់ហើយ។'
+                  : 'Your RSVP response and heartfelt blessings have been successfully recorded.'}
               </p>
               <button
                 onClick={() => setIsSubmitted(false)}
-                className="mt-2 text-xs font-bold text-emerald-900 underline hover:text-emerald-950"
+                className={`mt-2 text-xs font-bold text-emerald-900 underline hover:text-emerald-950 cursor-pointer ${isKhmer ? 'font-khmer' : 'font-sans'}`}
               >
-                ផ្ញើសារជូនពរបន្ថែម
+                {t.sendAnother}
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
               {/* Name */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  ឈ្មោះរបស់លោកអ្នក (Your Name) *
+                <label className={`block text-xs font-bold text-slate-700 mb-1.5 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                  {t.yourName}
                 </label>
                 <input
                   type="text"
                   required
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="ឧទាហរណ៍៖ ឯកឧត្តម សុខ ចាន់ថន ឬ លោក ហេង ពិសិដ្ឋ"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white font-khmer"
+                  placeholder={t.namePlaceholder}
+                  className={`w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white ${isKhmer ? 'font-khmer' : 'font-sans'}`}
                 />
               </div>
 
-              {/* Attendance Selection */}
+              {/* Attendance confirmation */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  ការបញ្ជាក់វត្តមាន (RSVP Status) *
+                <label className={`block text-xs font-bold text-slate-700 mb-2 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                  {t.confirmation}
                 </label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => setAttendance('attending')}
-                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       attendance === 'attending'
-                        ? 'bg-amber-700 text-white border-amber-700 shadow-xs'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        ? 'bg-amber-100/80 border-amber-400 text-amber-950 shadow-xs'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    <UserCheck className="w-4 h-4" />
-                    <span>ចូលរួម (Attending)</span>
+                    <UserCheck className="w-3.5 h-3.5 text-amber-700" />
+                    <span className={isKhmer ? 'font-khmer' : 'font-sans'}>{t.attending}</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setAttendance('declined')}
-                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                       attendance === 'declined'
-                        ? 'bg-slate-800 text-white border-slate-800 shadow-xs'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        ? 'bg-rose-50 border-rose-300 text-rose-900 shadow-xs'
+                        : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    <UserX className="w-4 h-4" />
-                    <span>អវត្តមាន (Decline)</span>
+                    <UserX className="w-3.5 h-3.5 text-rose-600" />
+                    <span className={isKhmer ? 'font-khmer' : 'font-sans'}>{t.declined}</span>
                   </button>
                 </div>
               </div>
 
-              {/* Number of Pax if attending */}
+              {/* Number of Pax */}
               {attendance === 'attending' && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    ចំនួនភ្ញៀវចូលរួម (Number of Pax)
+                  <label className={`block text-xs font-bold text-slate-700 mb-1.5 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                    {t.numberOfPax}
                   </label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((num) => (
-                      <button
-                        key={num}
-                        type="button"
-                        onClick={() => setPax(num)}
-                        className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${
-                          pax === num
-                            ? 'bg-amber-100 border-amber-400 text-amber-950 font-bold'
-                            : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                        }`}
-                      >
-                        {num} នាក់
-                      </button>
+                  <select
+                    value={pax}
+                    onChange={(e) => setPax(Number(e.target.value))}
+                    className={`w-full px-4 py-2.5 rounded-xl border border-amber-200 focus:border-amber-500 outline-none text-xs sm:text-sm bg-white font-medium ${isKhmer ? 'font-khmer' : 'font-sans'}`}
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>
+                        {isKhmer ? `${n} នាក់` : `${n} Guest${n > 1 ? 's' : ''}`}
+                      </option>
                     ))}
-                  </div>
+                  </select>
                 </div>
               )}
 
-              {/* Message */}
+              {/* Blessing Message */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  ពាក្យជូនពរសិរីមង្គល (Blessing Message) *
+                <label className={`block text-xs font-bold text-slate-700 mb-1.5 ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                  {t.blessingMessage}
                 </label>
                 <textarea
-                  required
                   rows={4}
+                  required
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="សូមសរសេរពាក្យជូនពរជ័យសិរីមង្គលដល់គូស្វាមីភរិយាថ្មី..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white resize-none font-khmer"
+                  placeholder={t.messagePlaceholder}
+                  className={`w-full px-4 py-3 rounded-xl border border-amber-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white ${isKhmer ? 'font-khmer' : 'font-sans'}`}
                 />
               </div>
 
-              {/* Submit Button */}
+              {/* Submit button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-900/15 hover:shadow-lg transition-all disabled:opacity-50"
+                className="w-full py-3.5 px-6 rounded-2xl gold-foil-bg text-amber-950 font-bold text-sm shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer border border-yellow-200"
               >
-                <Send className="w-4 h-4" />
-                <span>{isSubmitting ? 'កំពុងផ្ញើ...' : 'ផ្ញើការបញ្ជាក់វត្តមាន & ពរជ័យ'}</span>
+                <span className={isKhmer ? 'font-khmer-koulen text-base tracking-wide' : 'font-sans'}>
+                  {isSubmitting ? t.sending : t.sendRsvp}
+                </span>
               </button>
             </form>
           )}
         </div>
 
-        {/* Wishes Feed */}
-        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-amber-200/90 shadow-md flex flex-col h-[540px]`}>
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2 text-amber-900 font-bold text-base">
+        {/* Guestbook List Card */}
+        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-[32px] ${themeConfig.cardBg} border-2 border-amber-300/80 shadow-md`}>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2 text-amber-950 font-bold text-base">
               <MessageSquare className="w-5 h-5 text-amber-600" />
-              <span className="font-khmer-koulen text-lg tracking-wide">សៀវភៅពរជ័យមង្គល</span>
+              <span className={`text-lg tracking-wide ${isKhmer ? 'font-khmer-koulen' : 'font-playfair'}`}>
+                {t.guestbookTitle}
+              </span>
             </div>
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-950 font-khmer">
-              {wishesList.length} ពរជ័យ
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+              {wishesList.length}
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto space-y-4 pr-1 mt-4 scrollbar-thin">
+          <div className="space-y-4 max-h-[460px] overflow-y-auto pr-1">
             {wishesList.length === 0 ? (
-              <div className="text-center py-12 text-slate-400 text-xs sm:text-sm">
-                មិនទាន់មានពាក្យជូនពរនៅឡើយទេ។ សូមក្លាយជាអ្នកដំបូងដែលផ្តល់ពរជ័យ!
-              </div>
+              <p className={`text-xs text-slate-400 text-center py-10 italic ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                {t.noWishesYet}
+              </p>
             ) : (
-              wishesList.map((wish) => (
+              wishesList.map((w) => (
                 <div
-                  key={wish.id}
-                  className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/60 text-left transition-all hover:bg-amber-50/80"
+                  key={w.id}
+                  className="p-4 rounded-2xl bg-white/80 border border-amber-200/70 shadow-xs space-y-1.5 transition-all hover:border-amber-300"
                 >
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-amber-200 text-amber-950 font-bold text-xs flex items-center justify-center">
-                        {wish.guestName.charAt(0)}
-                      </div>
-                      <div>
-                        <h5 className="font-bold text-slate-900 text-xs sm:text-sm">
-                          {wish.guestName}
-                        </h5>
-                        <span className="text-[10px] text-slate-400">{wish.createdAt}</span>
-                      </div>
-                    </div>
-
+                  <div className="flex items-center justify-between">
+                    <h5 className={`font-bold text-slate-900 text-xs sm:text-sm ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                      {w.guestName}
+                    </h5>
+                    <span className="text-[10px] text-slate-400">{w.createdAt}</span>
+                  </div>
+                  <p className={`text-xs text-slate-700 leading-relaxed ${isKhmer ? 'font-khmer' : 'font-sans'}`}>
+                    {w.message}
+                  </p>
+                  <div className="pt-1 flex items-center gap-2">
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        wish.attendance === 'attending'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-slate-200 text-slate-700'
+                      className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                        w.attendance === 'attending'
+                          ? 'bg-amber-100 text-amber-900'
+                          : 'bg-rose-100 text-rose-800'
                       }`}
                     >
-                      {wish.attendance === 'attending' ? `ចូលរួម (${wish.pax || 1} នាក់)` : 'អវត្តមាន'}
+                      {w.attendance === 'attending' ? t.attending : t.declined}
                     </span>
                   </div>
-
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-khmer mt-1">
-                    {wish.message}
-                  </p>
                 </div>
               ))
             )}

@@ -40,15 +40,17 @@ export interface CouplePerson {
 
 export interface WeddingEvent {
   id: string;
-  title: string;          // e.g. "Holy Matrimony" / "ពិធីហែជំនូន"
-  titleKhmer?: string;
+  title: string;          // e.g. "Holy Matrimony"
+  titleKhmer?: string;    // e.g. "ពិធីហែជំនូន"
   date: string;           // "2026-11-28"
   dateKhmer?: string;
   startTime: string;      // "07:30"
   endTime: string;        // "11:00"
   timeZone: string;       // "ICT" | "EST" | "CET" | "GMT+7"
   venueName: string;
+  venueNameKhmer?: string;
   address: string;
+  addressKhmer?: string;
   mapsUrl: string;
   mapsEmbedUrl?: string;
   livestreamUrl?: string;
@@ -57,6 +59,7 @@ export interface WeddingEvent {
 export interface LoveStoryItem {
   id: string;
   year: string;
+  yearKhmer?: string;
   title: string;
   titleKhmer?: string;
   description: string;
@@ -68,6 +71,7 @@ export interface GalleryPhoto {
   id: string;
   url: string;
   caption?: string;
+  captionKhmer?: string;
 }
 
 export interface DigitalGift {
@@ -83,10 +87,12 @@ export interface DigitalGift {
     | 'bank' 
     | 'gift_address';
   providerName: string;   // "ABA Bank KHQR", "PayPal", "Wise Transfer", "Zelle", "Venmo", "Bank Wire"
+  providerNameKhmer?: string;
   accountNumber: string;  // "paypal.me/couple" or account number / IBAN
   accountHolder: string;  // "Visal & Thida"
   qrCodeUrl?: string;
   note?: string;
+  noteKhmer?: string;
 }
 
 export interface GuestItem {
