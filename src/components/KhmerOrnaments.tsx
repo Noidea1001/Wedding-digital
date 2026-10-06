@@ -104,37 +104,54 @@ export function KhmerArchFrame({ children }: { children: React.ReactNode }) {
 
 // Sweet Floating Lotus & Rose Petals (ផ្កាឈូករោយ)
 export function SweetFloatingPetals() {
+  const petals = [
+    { left: '6%', top: '-8%', delay: '0s', duration: '11s', size: 'w-6 h-7', rotate: 15 },
+    { left: '18%', top: '25%', delay: '2s', duration: '13s', size: 'w-5 h-6', rotate: -30 },
+    { left: '32%', top: '65%', delay: '4s', duration: '12s', size: 'w-7 h-8', rotate: 45 },
+    { left: '50%', top: '-5%', delay: '1.5s', duration: '14s', size: 'w-5 h-6', rotate: -15 },
+    { left: '68%', top: '40%', delay: '3.5s', duration: '12s', size: 'w-6 h-7', rotate: 60 },
+    { left: '82%', top: '15%', delay: '0.8s', duration: '15s', size: 'w-5 h-6', rotate: -45 },
+    { left: '92%', top: '80%', delay: '5s', duration: '13s', size: 'w-6 h-7', rotate: 25 },
+    { left: '40%', top: '-12%', delay: '6s', duration: '16s', size: 'w-7 h-8', rotate: -20 },
+  ];
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-20">
-      {/* 8 Floating Petals with CSS animations */}
-      {[
-        { left: '8%', delay: '0s', duration: '14s', size: 'w-5 h-6' },
-        { left: '22%', delay: '2.5s', duration: '16s', size: 'w-4 h-5' },
-        { left: '42%', delay: '5s', duration: '18s', size: 'w-6 h-7' },
-        { left: '60%', delay: '1s', duration: '15s', size: 'w-4 h-5' },
-        { left: '78%', delay: '3.8s', duration: '17s', size: 'w-5 h-6' },
-        { left: '92%', delay: '6.2s', duration: '19s', size: 'w-4 h-5' },
-      ].map((petal, i) => (
+      {petals.map((petal, i) => (
         <div
           key={i}
-          className={`absolute -top-10 opacity-75 ${petal.size} animate-petal-fall`}
+          className={`absolute opacity-75 ${petal.size} animate-petal-fall`}
           style={{
             left: petal.left,
+            top: petal.top,
             animationDelay: petal.delay,
             animationDuration: petal.duration,
+            transform: `rotate(${petal.rotate}deg)`,
           }}
         >
-          <svg viewBox="0 0 30 35" className="w-full h-full drop-shadow-sm">
-            {/* Romantic pink lotus petal shape */}
+          <svg viewBox="0 0 32 38" className="w-full h-full drop-shadow-md">
+            {/* Natural curved sweet lotus petal */}
             <path
-              d="M 15 2 C 22 8, 28 18, 26 26 C 24 32, 18 34, 15 34 C 12 34, 6 32, 4 26 C 2 18, 8 8, 15 2 Z"
-              fill="url(#petalGradient)"
+              d="M 16 2 C 24 8, 30 19, 28 28 C 26 34, 19 36, 16 36 C 13 36, 6 34, 4 28 C 2 19, 8 8, 16 2 Z"
+              fill={`url(#petalGrad-${i % 2})`}
+            />
+            <path
+              d="M 16 6 C 18 14, 18 24, 16 32"
+              stroke="#FFF"
+              strokeWidth="0.8"
+              strokeOpacity="0.4"
+              fill="none"
             />
             <defs>
-              <linearGradient id="petalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#F9A8D4" stopOpacity="0.85" />
-                <stop offset="60%" stopColor="#F472B6" stopOpacity="0.75" />
-                <stop offset="100%" stopColor="#FB7185" stopOpacity="0.85" />
+              <linearGradient id="petalGrad-0" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FDA4AF" stopOpacity="0.9" />
+                <stop offset="60%" stopColor="#FB7185" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#E11D48" stopOpacity="0.7" />
+              </linearGradient>
+              <linearGradient id="petalGrad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FBCFE8" stopOpacity="0.95" />
+                <stop offset="50%" stopColor="#F472B6" stopOpacity="0.85" />
+                <stop offset="100%" stopColor="#DB2777" stopOpacity="0.75" />
               </linearGradient>
             </defs>
           </svg>

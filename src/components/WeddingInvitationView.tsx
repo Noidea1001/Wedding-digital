@@ -75,6 +75,7 @@ export default function WeddingInvitationView({
           weddingDateFormatted={formattedDate}
           guestName={resolvedGuestName}
           guestGroup={guestGroup}
+          coverPhotoUrl={data.coverPhotoUrl || data.gallery[0]?.url || data.bride.photoUrl}
           themeConfig={themeConfig}
           onOpenInvitation={() => setIsOpened(true)}
         />

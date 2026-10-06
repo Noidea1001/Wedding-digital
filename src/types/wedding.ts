@@ -141,6 +141,7 @@ export interface WeddingInvitationData {
     artist: string;
     audioUrl: string;
   };
+  coverPhotoUrl?: string;
   groom: CouplePerson;
   bride: CouplePerson;
   events: WeddingEvent[];

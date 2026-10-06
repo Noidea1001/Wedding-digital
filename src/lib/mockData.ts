@@ -23,6 +23,7 @@ export const KHMER_ROYAL_WEDDING: WeddingInvitationData = {
     artist: 'Traditional Khmer Wedding Music',
     audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/16/audio_c976932a39.mp3?filename=romantic-piano-wedding-111883.mp3'
   },
+  coverPhotoUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop',
   groom: {
     fullName: 'SOK VISAL',
     fullNameKhmer: 'សុខ វិសាល',

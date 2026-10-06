@@ -159,3 +159,32 @@
 .backface-hidden {
   backface-visibility: hidden;
 }
+
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-150%) skewX(-25deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmerSweep 3.5s infinite ease-in-out;
+}
+
+.wax-seal-luxury {
+  background: radial-gradient(circle at 35% 30%, #FFE082 0%, #E5A93C 30%, #B8860B 65%, #6B4900 100%);
+  box-shadow: 0 12px 30px rgba(138, 98, 9, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.wax-seal-ruby {
+  background: radial-gradient(circle at 35% 30%, #FF8A80 0%, #D32F2F 40%, #880E4F 80%, #4A001F 100%);
+  box-shadow: 0 12px 30px rgba(136, 14, 79, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.5), inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.gold-ribbon-satin {
+  background: linear-gradient(90deg, #996515 0%, #D4AF37 20%, #FCF6BA 50%, #D4AF37 80%, #996515 100%);
+  box-shadow: 0 4px 15px rgba(180, 130, 20, 0.35);
+}
+
