@@ -16,6 +16,8 @@ import GallerySection from './GallerySection';
 import DigitalGiftSection from './DigitalGiftSection';
 import RsvpAndWishesSection from './RsvpAndWishesSection';
 import BottomNavBar from './BottomNavBar';
+import SparkleParticles from './SparkleParticles';
+import { GoldDivider, KbachCorner } from './KhmerOrnaments';
 
 interface WeddingInvitationViewProps {
   data: WeddingInvitationData;
@@ -53,12 +55,13 @@ export default function WeddingInvitationView({
   const displayBrideNick = (isKhmerLocale && data.bride.nicknameKhmer) ? data.bride.nicknameKhmer : data.bride.nickname;
 
   const resolvedGuestName = guestName || t.honoredGuest;
-
-  // Group theme keys by category for convenient browsing
   const themeKeys = Object.keys(THEME_CONFIGS) as WeddingTheme[];
 
   return (
     <div className={`min-h-screen ${themeConfig.bodyBg} ${themeConfig.primaryText} relative selection:bg-amber-200 selection:text-amber-950 overflow-x-hidden pb-24 font-khmer`}>
+      {/* Ambient Floating Golden Sparkle Particles */}
+      <SparkleParticles />
+
       {/* 1. Envelope Opening Cover */}
       {!isOpened && (
         <EnvelopeCover
@@ -88,16 +91,16 @@ export default function WeddingInvitationView({
             <div className="relative">
               <button
                 onClick={() => setShowThemePicker(!showThemePicker)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-800 text-xs font-bold border border-slate-200 shadow-md backdrop-blur-md hover:bg-slate-50 transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 text-slate-800 text-xs font-bold border border-amber-300 shadow-md backdrop-blur-md hover:bg-amber-50 transition-all"
               >
                 <Palette className="w-3.5 h-3.5 text-amber-700" />
                 <span className="hidden sm:inline">{t.templates}:</span>
-                <span className="text-amber-800">{themeConfig.name.split(' ')[0]}</span>
+                <span className="text-amber-800 font-bold">{themeConfig.name.split(' ')[0]}</span>
               </button>
 
               {/* Extended Theme Picker Dropdown */}
               {showThemePicker && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border-2 border-slate-200 p-3 z-50 animate-fadeIn max-h-96 overflow-y-auto">
+                <div className="absolute right-0 mt-2 w-80 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-amber-300 p-3 z-50 animate-fadeIn max-h-96 overflow-y-auto">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
                     {t.selectTemplate} (12 Choices):
                   </p>
@@ -112,9 +115,9 @@ export default function WeddingInvitationView({
                             setActiveTheme(tKey);
                             setShowThemePicker(false);
                           }}
-                          className={`w-full text-left p-2 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
+                          className={`w-full text-left p-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
                             isCurrent
-                              ? 'bg-amber-100 text-amber-950 border border-amber-300'
+                              ? 'bg-amber-100 text-amber-950 border border-amber-400 shadow-xs'
                               : 'hover:bg-slate-50 text-slate-700'
                           }`}
                         >
@@ -142,42 +145,45 @@ export default function WeddingInvitationView({
         autoPlayTrigger={isOpened}
       />
 
-      {/* 3. Hero Section */}
+      {/* 3. Hero Section (Ultra-Luxury Gold & Glassmorphism) */}
       <section
         id="hero"
         className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 pt-12 pb-16 overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-200/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-300/20 via-transparent to-transparent pointer-events-none" />
 
-        {/* Traditional/Modern Ribbon */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 text-slate-800 text-xs font-bold mb-6 shadow-xs font-khmer">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+        {/* Traditional/Modern Golden Pill */}
+        <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-amber-300/80 text-amber-950 text-xs font-bold mb-6 shadow-xs font-khmer">
+          <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
           <span>{t.auspiciousBlessing}</span>
         </div>
 
-        {/* Sacred / Grand Title */}
-        <h2 className={`${themeConfig.headerFontClass} text-2xl sm:text-3xl text-amber-900 tracking-wider mb-2`}>
+        {/* Sacred / Grand Title with Gold Foil */}
+        <h2 className={`${themeConfig.headerFontClass} text-2xl sm:text-4xl gold-foil-text tracking-wider mb-2`}>
           {isKhmerLocale ? data.titleKhmer : t.theWeddingOf}
         </h2>
 
         {/* Grand Typography Couple Name */}
-        <div className="max-w-3xl mx-auto my-4">
+        <div className="max-w-3xl mx-auto my-4 relative">
           <h1 className={`${themeConfig.titleFontClass} text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight`}>
             {displayGroom}
           </h1>
           <div className="flex items-center justify-center gap-4 my-2">
-            <div className="h-[2px] w-12 sm:w-20 bg-amber-400" />
-            <span className="font-serif italic text-3xl sm:text-5xl text-amber-700">{t.and}</span>
-            <div className="h-[2px] w-12 sm:w-20 bg-amber-400" />
+            <div className="h-[2px] w-12 sm:w-20 bg-gradient-to-r from-transparent to-amber-400" />
+            <span className="font-serif italic text-3xl sm:text-5xl gold-foil-text font-bold">&</span>
+            <div className="h-[2px] w-12 sm:w-20 bg-gradient-to-l from-transparent to-amber-400" />
           </div>
           <h1 className={`${themeConfig.titleFontClass} text-4xl sm:text-6xl tracking-wide text-slate-900 leading-tight`}>
             {displayBride}
           </h1>
         </div>
 
+        {/* Sacred Lotus Gold Divider */}
+        <GoldDivider />
+
         {/* Wedding Date Display */}
-        <div className="mt-4 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 shadow-xs inline-block">
-          <p className="text-xs sm:text-sm font-bold text-slate-800 font-khmer">
+        <div className="mt-1 px-5 py-2 rounded-full bg-white/80 backdrop-blur-md border border-amber-300 shadow-sm inline-block">
+          <p className="text-xs sm:text-sm font-bold text-amber-950 font-khmer">
             {isKhmerLocale ? (mainEvent.dateKhmer || mainEvent.date) : mainEvent.date}
           </p>
         </div>
@@ -239,11 +245,11 @@ export default function WeddingInvitationView({
       />
 
       {/* 10. Closing Section */}
-      <section className="py-16 px-4 text-center max-w-2xl mx-auto font-khmer">
-        <div className="w-14 h-14 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-6 shadow-sm border border-amber-300">
-          <Heart className="w-7 h-7 fill-current animate-pulse-soft" />
+      <section className="py-16 px-4 text-center max-w-2xl mx-auto font-khmer relative">
+        <div className="w-16 h-16 rounded-full gold-foil-bg text-amber-950 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-amber-900/20 border-2 border-yellow-200 animate-pulse-gold">
+          <Heart className="w-8 h-8 fill-current" />
         </div>
-        <h3 className={`${themeConfig.headerFontClass} text-xl sm:text-2xl text-amber-900 mb-3`}>
+        <h3 className={`${themeConfig.headerFontClass} text-xl sm:text-2xl gold-foil-text mb-3`}>
           {t.thankYouGratitude}
         </h3>
         <p className="mt-4 text-xs sm:text-sm text-slate-700 leading-loose">
@@ -252,7 +258,7 @@ export default function WeddingInvitationView({
             : 'We would like to express our deepest gratitude to all our families, friends, and honored guests for your warm presence, blessings, and love on our special day.'
           }
         </p>
-        <div className="mt-8 pt-6 border-t border-slate-200">
+        <div className="mt-8 pt-6 border-t border-amber-200">
           <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">{t.warmRegards}</p>
           <p className={`${themeConfig.titleFontClass} text-2xl text-slate-900 mt-2`}>
             {displayGroomNick} & {displayBrideNick}

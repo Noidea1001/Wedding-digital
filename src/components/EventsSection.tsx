@@ -4,6 +4,7 @@ import React from 'react';
 import { Calendar, Clock, MapPin, Navigation, Video } from 'lucide-react';
 import { WeddingEvent } from '@/types/wedding';
 import { ThemeConfig } from '@/lib/themes';
+import { KbachCorner } from './KhmerOrnaments';
 
 interface EventsSectionProps {
   events: WeddingEvent[];
@@ -40,8 +41,12 @@ export default function EventsSection({
         {events.map((event, idx) => (
           <div
             key={event.id || idx}
-            className={`p-6 rounded-3xl ${themeConfig.cardBg} flex flex-col justify-between group hover:shadow-xl transition-all duration-300 relative border border-amber-200/80`}
+            className={`p-6 rounded-3xl ${themeConfig.cardBg} flex flex-col justify-between group hover:shadow-xl transition-all duration-300 relative border-2 border-amber-300/80`}
           >
+            <KbachCorner position="top-left" />
+            <KbachCorner position="top-right" />
+            <KbachCorner position="bottom-left" />
+            <KbachCorner position="bottom-right" />
             {/* Top accent badge */}
             <div className="mb-4">
               <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-amber-100 text-amber-950 font-khmer">

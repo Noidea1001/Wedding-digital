@@ -99,12 +99,12 @@ export default function CountdownTimer({
             {timeBlocks.map((block, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-md border border-slate-200/60 transition-transform hover:-translate-y-0.5"
+                className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg border-2 border-amber-300/80 transition-transform hover:-translate-y-1 hover:border-amber-400 group"
               >
-                <span className="text-2xl sm:text-3xl font-bold font-cormorant tracking-tight text-slate-800">
+                <span className="text-2xl sm:text-3xl font-bold font-cormorant tracking-tight gold-foil-text">
                   {String(block.value).padStart(2, '0')}
                 </span>
-                <span className="text-[10px] sm:text-xs font-semibold tracking-wider text-slate-500 uppercase mt-0.5">
+                <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-slate-500 uppercase mt-0.5">
                   {block.label}
                 </span>
               </div>
@@ -113,10 +113,10 @@ export default function CountdownTimer({
 
           <button
             onClick={handleAddToCalendar}
-            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-white shadow-lg shadow-rose-900/10 hover:opacity-95 transition-all bg-gradient-to-r from-rose-700 to-rose-600 hover:scale-105 active:scale-95"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-bold text-amber-950 shadow-xl shadow-amber-900/20 hover:opacity-95 transition-all gold-foil-bg hover:scale-105 active:scale-95 border border-yellow-200"
           >
-            <Calendar className="w-4 h-4" />
-            <span>Simpan ke Google Calendar</span>
+            <Calendar className="w-4 h-4 text-amber-950" />
+            <span>Save to Google Calendar</span>
           </button>
         </>
       )}

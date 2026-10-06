@@ -4,6 +4,7 @@ import React from 'react';
 import { Heart, Send } from 'lucide-react';
 import { CouplePerson } from '@/types/wedding';
 import { ThemeConfig } from '@/lib/themes';
+import { KbachCorner, GoldDivider } from './KhmerOrnaments';
 
 function InstagramIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   return (
@@ -68,7 +69,11 @@ export default function CoupleSection({
       {/* Couple Profiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
         {/* Groom Card (កូនកំលោះ) */}
-        <div className={`p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} flex flex-col items-center group hover:shadow-xl transition-all duration-300 relative`}>
+        <div className={`p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} flex flex-col items-center group hover:shadow-xl transition-all duration-300 relative border-2 border-amber-300/80`}>
+          <KbachCorner position="top-left" />
+          <KbachCorner position="top-right" />
+          <KbachCorner position="bottom-left" />
+          <KbachCorner position="bottom-right" />
           <div className="absolute top-4 right-4">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 font-khmer">
               កូនកំលោះ (Groom)
@@ -125,7 +130,11 @@ export default function CoupleSection({
         </div>
 
         {/* Bride Card (កូនក្រមុំ) */}
-        <div className={`p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} flex flex-col items-center group hover:shadow-xl transition-all duration-300 relative`}>
+        <div className={`p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} flex flex-col items-center group hover:shadow-xl transition-all duration-300 relative border-2 border-amber-300/80`}>
+          <KbachCorner position="top-left" />
+          <KbachCorner position="top-right" />
+          <KbachCorner position="bottom-left" />
+          <KbachCorner position="bottom-right" />
           <div className="absolute top-4 right-4">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 font-khmer">
               កូនក្រមុំ (Bride)
