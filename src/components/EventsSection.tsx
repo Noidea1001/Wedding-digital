@@ -9,7 +9,9 @@ interface EventsSectionProps {
   events: WeddingEvent[];
   dressCode?: {
     title: string;
+    titleKhmer?: string;
     description: string;
+    descriptionKhmer?: string;
     colors: string[];
   };
   themeConfig: ThemeConfig;
@@ -20,86 +22,71 @@ export default function EventsSection({
   dressCode,
   themeConfig
 }: EventsSectionProps) {
-  // Format date helper: "2026-12-12" -> "Sabtu, 12 Desember 2026"
-  const formatDateIndo = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return new Intl.DateTimeFormat('id-ID', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }).format(d);
-    } catch {
-      return dateStr;
-    }
-  };
-
   return (
-    <section id="events" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12">
-      <div className="text-center mb-12">
-        <span className="text-xs font-semibold tracking-[0.25em] text-rose-700 uppercase block mb-2">
-          Save The Date
-        </span>
-        <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-slate-800">
-          Rangkaian Acara
+    <section id="events" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12 font-khmer">
+      <div className="text-center mb-14">
+        <h2 className="font-khmer-moul text-xl sm:text-2xl text-amber-900 mb-2">
+          កម្មវិធីបុណ្យអាពាហ៍ពិពាហ៍
         </h2>
-        <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
-          Dengan sukacita kami mengundang kehadiran Bapak/Ibu/Saudara/i pada serangkaian prosesi pernikahan kami:
+        <span className="text-xs uppercase tracking-[0.25em] font-semibold text-slate-400 block mb-3">
+          Wedding Schedule
+        </span>
+        <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto">
+          យើងខ្ញុំសូមគោរពអញ្ជើញ ឯកឧត្តម លោកជំទាវ លោក លោកស្រី អ្នកនាងកញ្ញា អញ្ជើញចូលរួមតាមពេលវេលា និងទីកន្លែងដូចខាងក្រោម៖
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {events.map((event) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map((event, idx) => (
           <div
-            key={event.id}
-            className={`p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} flex flex-col justify-between group hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
+            key={event.id || idx}
+            className={`p-6 rounded-3xl ${themeConfig.cardBg} flex flex-col justify-between group hover:shadow-xl transition-all duration-300 relative border border-amber-200/80`}
           >
             {/* Top accent badge */}
             <div className="mb-4">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-rose-100 text-rose-800 uppercase">
-                {event.title}
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-amber-100 text-amber-950 font-khmer">
+                {event.titleKhmer || event.title}
               </span>
             </div>
 
-            <div className="space-y-4 my-2">
+            <div className="space-y-3.5 my-2">
               {/* Date */}
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-200">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Tanggal</p>
-                  <p className="font-semibold text-slate-800 text-sm sm:text-base">
-                    {formatDateIndo(event.date)}
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">កាលបរិច្ឆេទ</p>
+                  <p className="font-semibold text-slate-800 text-xs sm:text-sm">
+                    {event.dateKhmer || event.date}
                   </p>
                 </div>
               </div>
 
               {/* Time */}
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-200">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Waktu</p>
-                  <p className="font-semibold text-slate-800 text-sm sm:text-base">
-                    Pukul {event.startTime} - {event.endTime} {event.timeZone}
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ពេលវេលា</p>
+                  <p className="font-semibold text-slate-800 text-xs sm:text-sm">
+                    ម៉ោង {event.startTime} - {event.endTime}
                   </p>
                 </div>
               </div>
 
               {/* Location */}
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-200">
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Lokasi / Tempat</p>
-                  <p className="font-semibold text-slate-800 text-sm sm:text-base">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ទីតាំង</p>
+                  <p className="font-semibold text-slate-800 text-xs sm:text-sm">
                     {event.venueName}
                   </p>
-                  <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                  <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
                     {event.address}
                   </p>
                 </div>
@@ -108,7 +95,7 @@ export default function EventsSection({
 
             {/* Embedded Map if provided */}
             {event.mapsEmbedUrl && (
-              <div className="my-4 w-full h-36 rounded-2xl overflow-hidden border border-slate-200">
+              <div className="my-3 w-full h-32 rounded-2xl overflow-hidden border border-slate-200">
                 <iframe
                   title={`Map for ${event.title}`}
                   src={event.mapsEmbedUrl}
@@ -122,28 +109,16 @@ export default function EventsSection({
             )}
 
             {/* Action Buttons */}
-            <div className="pt-4 flex flex-wrap gap-2.5 items-center">
+            <div className="pt-3">
               <a
                 href={event.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium bg-rose-700 hover:bg-rose-800 text-white shadow-md shadow-rose-900/10 transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white shadow-xs transition-colors"
               >
-                <Navigation className="w-4 h-4" />
-                <span>Petunjuk Arah (Google Maps)</span>
+                <Navigation className="w-3.5 h-3.5" />
+                <span>មើលផែនទី (Google Maps)</span>
               </a>
-
-              {event.livestreamUrl && (
-                <a
-                  href={event.livestreamUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors"
-                >
-                  <Video className="w-4 h-4" />
-                  <span>Live Streaming</span>
-                </a>
-              )}
             </div>
           </div>
         ))}
@@ -151,16 +126,20 @@ export default function EventsSection({
 
       {/* Dress Code Section */}
       {dressCode && (
-        <div className={`mt-10 p-6 rounded-3xl ${themeConfig.cardBg} text-center max-w-xl mx-auto`}>
-          <h4 className="font-playfair text-lg font-bold text-slate-800">{dressCode.title}</h4>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 mb-4">{dressCode.description}</p>
+        <div className={`mt-10 p-6 rounded-3xl ${themeConfig.cardBg} text-center max-w-xl mx-auto border border-amber-200/80`}>
+          <h4 className="font-khmer-koulen text-lg text-slate-900 tracking-wide">
+            {dressCode.titleKhmer || dressCode.title}
+          </h4>
+          <p className="text-xs text-slate-600 mt-1 mb-4 leading-relaxed font-khmer">
+            {dressCode.descriptionKhmer || dressCode.description}
+          </p>
           <div className="flex items-center justify-center gap-3">
             {dressCode.colors.map((color, idx) => (
               <div
                 key={idx}
                 className="w-8 h-8 rounded-full border-2 border-white shadow-md transform hover:scale-110 transition-transform"
                 style={{ backgroundColor: color }}
-                title={`Color ${idx + 1}: ${color}`}
+                title={`Color ${idx + 1}`}
               />
             ))}
           </div>

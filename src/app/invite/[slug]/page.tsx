@@ -13,8 +13,8 @@ export default function InvitePage() {
   const params = useParams();
   const searchParams = useSearchParams();
 
-  const slug = (params?.slug as string) || 'sarah-david';
-  const guestName = searchParams.get('to') || 'Tamu Undangan';
+  const slug = (params?.slug as string) || 'visal-thida';
+  const guestName = searchParams.get('to') || 'ភ្ញៀវកិត្តិយស';
   const guestGroup = searchParams.get('group') || undefined;
 
   const [weddingData, setWeddingData] = useState<WeddingInvitationData>(DEFAULT_WEDDING);

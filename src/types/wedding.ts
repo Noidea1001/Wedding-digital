@@ -1,33 +1,47 @@
 export type WeddingTheme = 
-  | 'floral-rose'      // Romantic blush pink & deep rose
-  | 'modern-sage'      // Elegant sage green & gold
-  | 'royal-gold'       // Luxurious navy & champagne gold
-  | 'celestial-midnight' // Moody starry night & silver
-  | 'rustic-terracotta'; // Warm earthy bohemian terracotta
+  // Khmer Dedicated Templates
+  | 'khmer-royal-gold'      // Traditional Royal Golden Heritage (រាជវង្សបុរាណ)
+  | 'khmer-angkor-lotus'     // Angkor Lotus Romance (ផ្កាឈូកអង្គរ)
+  | 'khmer-modern-emerald'   // Modern Emerald Jade & Gold (ត្បូងមរកត)
+  | 'khmer-midnight-star'    // Majestic Midnight Starlight (រាត្រីតារា)
+  | 'khmer-silk-terracotta'  // Traditional Khmer Silk & Amber (សូត្រខ្មែរ)
+  | 'khmer-minimal-ivory'    // Pure Minimalist Ivory & Gold (សាមញ្ញប្រណិត)
+  // Additional Modern International
+  | 'floral-rose'
+  | 'modern-sage'
+  | 'royal-gold';
 
-export type FontStyle = 'playfair' | 'cormorant' | 'cinzel' | 'sans';
+export type FontStyle = 'khmer-moul' | 'khmer-koulen' | 'khmer-sans' | 'playfair';
 
 export interface CouplePerson {
   fullName: string;
+  fullNameKhmer?: string;
   nickname: string;
+  nicknameKhmer?: string;
   fatherName: string;
+  fatherNameKhmer?: string;
   motherName: string;
+  motherNameKhmer?: string;
   photoUrl: string;
   instagram?: string;
-  childOrderText: string; // e.g. "Putra Pertama dari" / "Son of"
+  telegram?: string;
+  childOrderText: string;
+  childOrderTextKhmer?: string; // e.g. "កូនប្រុសច្បងរបស់" / "កូនស្រីពៅរបស់"
 }
 
 export interface WeddingEvent {
   id: string;
-  title: string;          // e.g. "Akad Nikah / Holy Matrimony"
-  date: string;           // "2026-11-20"
-  startTime: string;      // "09:00"
+  title: string;          // e.g. "ពិធីហែជំនូន & កាត់សក់បង្កក់សិរី"
+  titleKhmer?: string;
+  date: string;           // "2026-11-28"
+  dateKhmer?: string;     // e.g. "ថ្ងៃសៅរ៍ ទី២៨ ខែវិច្ឆិកា ឆ្នាំ២០២៦"
+  startTime: string;      // "07:30"
   endTime: string;        // "11:00"
-  timeZone: string;       // "WIB" | "WITA" | "WIT" | "GMT+7"
-  venueName: string;      // "The Glass House Garden"
-  address: string;        // "Jl. Sudirman No. 123, Jakarta"
-  mapsUrl: string;        // Google maps navigation link
-  mapsEmbedUrl?: string;  // Embed iframe url
+  timeZone: string;       // "ICT" | "GMT+7"
+  venueName: string;      // e.g. "The Premier Centre Sen Sok"
+  address: string;        // e.g. "រាជធានីភ្នំពេញ (Phnom Penh)"
+  mapsUrl: string;
+  mapsEmbedUrl?: string;
   livestreamUrl?: string;
 }
 
@@ -35,7 +49,9 @@ export interface LoveStoryItem {
   id: string;
   year: string;
   title: string;
+  titleKhmer?: string;
   description: string;
+  descriptionKhmer?: string;
   imageUrl?: string;
 }
 
@@ -47,10 +63,10 @@ export interface GalleryPhoto {
 
 export interface DigitalGift {
   id: string;
-  type: 'bank' | 'ewallet' | 'gift_address';
-  providerName: string;   // "BCA", "Mandiri", "GoPay", "Alamat Penerima"
-  accountNumber: string;  // "1234567890" or Address text
-  accountHolder: string;  // "Sarah Jenkins"
+  type: 'aba_khqr' | 'wing_khqr' | 'acleda_khqr' | 'bank' | 'gift_address';
+  providerName: string;   // "ABA Bank KHQR", "Wing Bank", "ACLEDA Bank"
+  accountNumber: string;  // "000 123 456"
+  accountHolder: string;  // "SOK VISAL"
   qrCodeUrl?: string;
   note?: string;
 }
@@ -58,7 +74,9 @@ export interface DigitalGift {
 export interface GuestItem {
   id: string;
   name: string;
+  nameKhmer?: string;
   phone?: string;
+  telegram?: string;
   group: 'VIP' | 'Family' | 'Colleague' | 'Friends';
   slug: string;
   status: 'pending' | 'attending' | 'declined';
@@ -79,11 +97,16 @@ export interface WishMessage {
 export interface WeddingInvitationData {
   id: string;
   slug: string;
+  templateId: string;
   title: string;
-  greetingText: string; // "Dengan memohon rahmat dan ridho Tuhan..."
+  titleKhmer: string; // "សិរីសួស្តី អាពាហ៍ពិពាហ៍"
+  greetingText: string;
+  greetingTextKhmer: string;
   quote: {
     text: string;
+    textKhmer?: string;
     source: string;
+    sourceKhmer?: string;
   };
   theme: WeddingTheme;
   fontStyle: FontStyle;
@@ -100,10 +123,13 @@ export interface WeddingInvitationData {
   gifts: DigitalGift[];
   dressCode?: {
     title: string;
+    titleKhmer?: string;
     description: string;
+    descriptionKhmer?: string;
     colors: string[];
   };
   rsvpDeadline?: string;
+  rsvpDeadlineKhmer?: string;
   wishes: WishMessage[];
   guests: GuestItem[];
 }

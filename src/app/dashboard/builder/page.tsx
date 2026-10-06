@@ -5,7 +5,7 @@ import DashboardNavbar from '@/components/DashboardNavbar';
 import WeddingInvitationView from '@/components/WeddingInvitationView';
 import { getWeddingData, saveWeddingData } from '@/lib/storage';
 import { WeddingInvitationData, WeddingTheme } from '@/types/wedding';
-import { DEFAULT_WEDDING } from '@/lib/mockData';
+import { DEFAULT_WEDDING, ALL_PRESET_WEDDINGS } from '@/lib/mockData';
 import { THEME_CONFIGS } from '@/lib/themes';
 import {
   Save,
@@ -21,7 +21,8 @@ import {
   Gift,
   Palette,
   Plus,
-  Trash2
+  Trash2,
+  Sparkles
 } from 'lucide-react';
 
 export default function BuilderPage() {
@@ -33,7 +34,7 @@ export default function BuilderPage() {
 
   useEffect(() => {
     setIsClient(true);
-    const existing = getWeddingData('sarah-david');
+    const existing = getWeddingData('visal-thida');
     setData(existing);
   }, []);
 
@@ -43,8 +44,18 @@ export default function BuilderPage() {
     setTimeout(() => setSaveToast(false), 2500);
   };
 
+  const handleLoadPreset = (slug: string) => {
+    const preset = ALL_PRESET_WEDDINGS[slug];
+    if (preset) {
+      setData(preset);
+      saveWeddingData(preset);
+      setSaveToast(true);
+      setTimeout(() => setSaveToast(false), 2000);
+    }
+  };
+
   const handleReset = () => {
-    if (confirm('Apakah Anda yakin ingin mengembalikan data ke template awal?')) {
+    if (confirm('តើអ្នកពិតជាចង់កំណត់ទិន្នន័យឡើងវិញទៅគំរូដើមមែនទេ?')) {
       setData(DEFAULT_WEDDING);
       saveWeddingData(DEFAULT_WEDDING);
     }
@@ -76,17 +87,48 @@ export default function BuilderPage() {
     setData(prev => ({ ...prev, theme }));
   };
 
+  const presetsNav = [
+    { slug: 'visal-thida', label: 'រាជវង្សបុរាណ (Royal Gold)' },
+    { slug: 'dara-bopha', label: 'ផ្កាឈូកអង្គរ (Angkor Lotus)' },
+    { slug: 'ratanak-socheata', label: 'ត្បូងមរកត (Emerald Jade)' },
+    { slug: 'seyha-muniroth', label: 'រាត្រីតារា (Midnight Star)' },
+    { slug: 'vibol-devi', label: 'សូត្រខ្មែរ (Silk & Amber)' },
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-100 flex flex-col font-khmer">
       <DashboardNavbar />
+
+      {/* Preset Templates Quick Switcher Bar */}
+      <div className="bg-amber-900 text-white px-4 sm:px-8 py-2.5 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
+        <span className="font-bold whitespace-nowrap text-amber-300 flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>ផ្ទុកម៉ូតគំរូ (Load Template):</span>
+        </span>
+        <div className="flex items-center gap-1.5">
+          {presetsNav.map((p) => (
+            <button
+              key={p.slug}
+              onClick={() => handleLoadPreset(p.slug)}
+              className={`whitespace-nowrap px-3 py-1 rounded-full font-bold transition-all ${
+                data.slug === p.slug
+                  ? 'bg-amber-400 text-amber-950 shadow-xs'
+                  : 'bg-amber-950/60 hover:bg-amber-800 text-amber-100'
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Builder Subheader */}
       <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 sticky top-16 z-20 shadow-xs">
         <div className="flex items-center gap-3">
-          <span className="font-playfair font-bold text-slate-800 text-lg">
-            Editor Undangan
+          <span className="font-khmer-koulen text-slate-800 text-xl tracking-wide">
+            កែសម្រួលសំបុត្រមង្គលការ (Editor)
           </span>
-          <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-medium">
+          <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-950 font-bold">
             Live Preview
           </span>
         </div>
@@ -96,8 +138,8 @@ export default function BuilderPage() {
           <div className="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
             <button
               onClick={() => setPreviewDevice('mobile')}
-              className={`p-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all ${
-                previewDevice === 'mobile' ? 'bg-white shadow-xs text-rose-800' : 'text-slate-600'
+              className={`p-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+                previewDevice === 'mobile' ? 'bg-white shadow-xs text-amber-900' : 'text-slate-600'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
@@ -105,8 +147,8 @@ export default function BuilderPage() {
             </button>
             <button
               onClick={() => setPreviewDevice('desktop')}
-              className={`p-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all ${
-                previewDevice === 'desktop' ? 'bg-white shadow-xs text-rose-800' : 'text-slate-600'
+              className={`p-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+                previewDevice === 'desktop' ? 'bg-white shadow-xs text-amber-900' : 'text-slate-600'
               }`}
             >
               <Monitor className="w-3.5 h-3.5" />
@@ -116,7 +158,7 @@ export default function BuilderPage() {
 
           <button
             onClick={handleReset}
-            title="Reset ke default"
+            title="កំណត់ឡើងវិញ (Reset)"
             className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all"
           >
             <RefreshCw className="w-4 h-4" />
@@ -124,10 +166,10 @@ export default function BuilderPage() {
 
           <button
             onClick={handleSave}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-700 hover:bg-rose-800 text-white text-xs sm:text-sm font-semibold shadow-md shadow-rose-900/15 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs sm:text-sm font-bold shadow-md shadow-amber-900/15 transition-all"
           >
             {saveToast ? <Check className="w-4 h-4 text-emerald-300" /> : <Save className="w-4 h-4" />}
-            <span>{saveToast ? 'Tersimpan!' : 'Simpan Perubahan'}</span>
+            <span>{saveToast ? 'បានរក្សាទុក!' : 'រក្សាទុកការកែប្រែ'}</span>
           </button>
         </div>
       </div>
@@ -139,12 +181,12 @@ export default function BuilderPage() {
           {/* Editor Tabs */}
           <div className="flex items-center gap-1 border-b border-slate-100 pb-3 overflow-x-auto scrollbar-none mb-6">
             {[
-              { id: 'couple', label: 'Mempelai', icon: Heart },
-              { id: 'events', label: 'Acara', icon: Calendar },
-              { id: 'story', label: 'Cerita Cinta', icon: BookOpen },
-              { id: 'gallery', label: 'Galeri', icon: ImageIcon },
-              { id: 'gifts', label: 'Amplop', icon: Gift },
-              { id: 'theme', label: 'Tema & Musik', icon: Palette },
+              { id: 'couple', label: 'មង្គលការ', icon: Heart },
+              { id: 'events', label: 'កម្មវិធីបុណ្យ', icon: Calendar },
+              { id: 'story', label: 'ប្រវត្តិស្នេហ៍', icon: BookOpen },
+              { id: 'gallery', label: 'រូបថត', icon: ImageIcon },
+              { id: 'gifts', label: 'ចងដៃ KHQR', icon: Gift },
+              { id: 'theme', label: 'ម៉ូត & ភ្លេងការ', icon: Palette },
             ].map((tab) => {
               const Icon = tab.icon;
               const isCurrent = activeTab === tab.id;
@@ -152,13 +194,13 @@ export default function BuilderPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                     isCurrent
-                      ? 'bg-rose-50 text-rose-800 border border-rose-200'
+                      ? 'bg-amber-50 text-amber-950 border border-amber-300'
                       : 'text-slate-600 hover:bg-slate-50'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className="w-3.5 h-3.5 text-amber-700" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -170,122 +212,160 @@ export default function BuilderPage() {
             {/* 1. COUPLE TAB */}
             {activeTab === 'couple' && (
               <div className="space-y-6 animate-fadeIn">
-                <h4 className="font-playfair text-lg font-bold text-slate-800 border-b border-slate-100 pb-2">
-                  Data Mempelai Pria (Groom)
+                <h4 className="font-khmer-koulen text-lg text-amber-900 border-b border-slate-100 pb-2">
+                  ព័ត៌មានកូនកំលោះ (Groom Profile)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap & Gelar</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះពេញជាភាសាខ្មែរ *</label>
+                    <input
+                      type="text"
+                      value={data.groom.fullNameKhmer || ''}
+                      onChange={(e) => updateGroom('fullNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះជាអក្សរឡាតាំង (Latin Name)</label>
                     <input
                       type="text"
                       value={data.groom.fullName}
                       onChange={(e) => updateGroom('fullName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Panggilan</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះហៅក្រៅ (Nickname)</label>
                     <input
                       type="text"
-                      value={data.groom.nickname}
-                      onChange={(e) => updateGroom('nickname', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.groom.nicknameKhmer || data.groom.nickname}
+                      onChange={(e) => updateGroom('nicknameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Ayah</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឋានៈក្នុងគ្រួសារ (Child Order)</label>
                     <input
                       type="text"
-                      value={data.groom.fatherName}
-                      onChange={(e) => updateGroom('fatherName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.groom.childOrderTextKhmer || data.groom.childOrderText}
+                      onChange={(e) => updateGroom('childOrderTextKhmer', e.target.value)}
+                      placeholder="ឧ. កូនប្រុសច្បង"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Ibu</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះលោកឪពុក</label>
                     <input
                       type="text"
-                      value={data.groom.motherName}
-                      onChange={(e) => updateGroom('motherName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.groom.fatherNameKhmer || data.groom.fatherName}
+                      onChange={(e) => updateGroom('fatherNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះអ្នកម្តាយ</label>
+                    <input
+                      type="text"
+                      value={data.groom.motherNameKhmer || data.groom.motherName}
+                      onChange={(e) => updateGroom('motherNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">URL Foto Profil Pria</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនកំលោះ</label>
                     <input
                       type="text"
                       value={data.groom.photoUrl}
                       onChange={(e) => updateGroom('photoUrl', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Instagram (@username)</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Telegram (@username)</label>
                     <input
                       type="text"
-                      value={data.groom.instagram || ''}
-                      onChange={(e) => updateGroom('instagram', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.groom.telegram || ''}
+                      onChange={(e) => updateGroom('telegram', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                 </div>
 
-                <h4 className="font-playfair text-lg font-bold text-slate-800 border-b border-slate-100 pb-2 pt-4">
-                  Data Mempelai Wanita (Bride)
+                <h4 className="font-khmer-koulen text-lg text-amber-900 border-b border-slate-100 pb-2 pt-4">
+                  ព័ត៌មានកូនក្រមុំ (Bride Profile)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap & Gelar</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះពេញជាភាសាខ្មែរ *</label>
+                    <input
+                      type="text"
+                      value={data.bride.fullNameKhmer || ''}
+                      onChange={(e) => updateBride('fullNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះជាអក្សរឡាតាំង (Latin Name)</label>
                     <input
                       type="text"
                       value={data.bride.fullName}
                       onChange={(e) => updateBride('fullName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Panggilan</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះហៅក្រៅ (Nickname)</label>
                     <input
                       type="text"
-                      value={data.bride.nickname}
-                      onChange={(e) => updateBride('nickname', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.bride.nicknameKhmer || data.bride.nickname}
+                      onChange={(e) => updateBride('nicknameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Ayah</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឋានៈក្នុងគ្រួសារ (Child Order)</label>
                     <input
                       type="text"
-                      value={data.bride.fatherName}
-                      onChange={(e) => updateBride('fatherName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.bride.childOrderTextKhmer || data.bride.childOrderText}
+                      onChange={(e) => updateBride('childOrderTextKhmer', e.target.value)}
+                      placeholder="ឧ. កូនស្រីទី២"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Nama Ibu</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះលោកឪពុក</label>
                     <input
                       type="text"
-                      value={data.bride.motherName}
-                      onChange={(e) => updateBride('motherName', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.bride.fatherNameKhmer || data.bride.fatherName}
+                      onChange={(e) => updateBride('fatherNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">ឈ្មោះអ្នកម្តាយ</label>
+                    <input
+                      type="text"
+                      value={data.bride.motherNameKhmer || data.bride.motherName}
+                      onChange={(e) => updateBride('motherNameKhmer', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">URL Foto Profil Wanita</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">URL រូបថតកូនក្រមុំ</label>
                     <input
                       type="text"
                       value={data.bride.photoUrl}
                       onChange={(e) => updateBride('photoUrl', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Instagram (@username)</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Telegram (@username)</label>
                     <input
                       type="text"
-                      value={data.bride.instagram || ''}
-                      onChange={(e) => updateBride('instagram', e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-rose-400 outline-none"
+                      value={data.bride.telegram || ''}
+                      onChange={(e) => updateBride('telegram', e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-amber-500 outline-none"
                     />
                   </div>
                 </div>
@@ -298,65 +378,58 @@ export default function BuilderPage() {
                 {data.events.map((event, index) => (
                   <div key={event.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
                     <h5 className="font-bold text-slate-800 text-sm flex items-center justify-between">
-                      <span>Acara #{index + 1}: {event.title}</span>
+                      <span>កម្មវិធីទី #{index + 1}: {event.titleKhmer || event.title}</span>
                     </h5>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Judul Acara</label>
+                      <div className="sm:col-span-2">
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ឈ្មោះកម្មវិធី (Khmer Title)</label>
                         <input
                           type="text"
-                          value={event.title}
-                          onChange={(e) => updateEvent(index, 'title', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
+                          value={event.titleKhmer || event.title}
+                          onChange={(e) => updateEvent(index, 'titleKhmer', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Tanggal (YYYY-MM-DD)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">កាលបរិច្ឆេទជាអក្សរខ្មែរ</label>
                         <input
-                          type="date"
-                          value={event.date}
-                          onChange={(e) => updateEvent(index, 'date', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
+                          type="text"
+                          value={event.dateKhmer || event.date}
+                          onChange={(e) => updateEvent(index, 'dateKhmer', e.target.value)}
+                          placeholder="ឧ. ថ្ងៃសៅរ៍ ទី២៨ ខែវិច្ឆិកា ឆ្នាំ២០២៦"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Waktu Mulai</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ពេលវេលា (Time)</label>
                         <input
                           type="text"
                           value={event.startTime}
                           onChange={(e) => updateEvent(index, 'startTime', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Waktu Selesai</label>
-                        <input
-                          type="text"
-                          value={event.endTime}
-                          onChange={(e) => updateEvent(index, 'endTime', e.target.value)}
+                          placeholder="ឧ. 07:00 ព្រឹក"
                           className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Nama Tempat / Venue</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ទីតាំងកម្មវិធី (Venue Name)</label>
                         <input
                           type="text"
                           value={event.venueName}
                           onChange={(e) => updateEvent(index, 'venueName', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Alamat Lengkap</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">អាសយដ្ឋានលម្អិត (Address)</label>
                         <input
                           type="text"
                           value={event.address}
                           onChange={(e) => updateEvent(index, 'address', e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Link Google Maps</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">តំណភ្ជាប់ Google Maps Link</label>
                         <input
                           type="text"
                           value={event.mapsUrl}
@@ -374,8 +447,8 @@ export default function BuilderPage() {
             {activeTab === 'story' && (
               <div className="space-y-4 animate-fadeIn">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-playfair text-lg font-bold text-slate-800">
-                    Milestone Perjalanan Cinta
+                  <h4 className="font-khmer-koulen text-lg text-amber-900">
+                    ប្រវត្តិដំណើររឿងស្នេហ៍
                   </h4>
                   <button
                     onClick={() => {
@@ -385,18 +458,19 @@ export default function BuilderPage() {
                           ...prev.loveStories,
                           {
                             id: `story-${Date.now()}`,
-                            year: '2026',
-                            title: 'Momen Baru',
-                            description: 'Deskripsi kisah cinta...',
+                            year: '២០២៦',
+                            title: 'អនុស្សាវរីយ៍ថ្មី',
+                            titleKhmer: 'អនុស្សាវរីយ៍ថ្មី',
+                            description: 'រឿងរ៉ាវស្នេហា...',
                             imageUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800'
                           }
                         ]
                       }));
                     }}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 text-xs font-semibold hover:bg-rose-100"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Tambah Momen</span>
+                    <span>បន្ថែមអនុស្សាវរីយ៍</span>
                   </button>
                 </div>
 
@@ -410,13 +484,12 @@ export default function BuilderPage() {
                         }));
                       }}
                       className="absolute top-3 right-3 text-slate-400 hover:text-red-600"
-                      title="Hapus"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Tahun</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ឆ្នាំ</label>
                         <input
                           type="text"
                           value={story.year}
@@ -428,27 +501,27 @@ export default function BuilderPage() {
                               return { ...prev, loveStories: s };
                             });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Judul Momen</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ចំណងជើង</label>
                         <input
                           type="text"
-                          value={story.title}
+                          value={story.titleKhmer || story.title}
                           onChange={(e) => {
                             const val = e.target.value;
                             setData(prev => {
                               const s = [...prev.loveStories];
-                              s[idx].title = val;
+                              s[idx].titleKhmer = val;
                               return { ...prev, loveStories: s };
                             });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                       <div className="sm:col-span-3">
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Deskripsi Cerita</label>
+                        <label className="block text-[11px] font-bold text-slate-500 mb-1">ការរៀបរាប់</label>
                         <textarea
                           rows={2}
                           value={story.description}
@@ -460,7 +533,7 @@ export default function BuilderPage() {
                               return { ...prev, loveStories: s };
                             });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-khmer"
                         />
                       </div>
                     </div>
@@ -473,8 +546,8 @@ export default function BuilderPage() {
             {activeTab === 'gallery' && (
               <div className="space-y-4 animate-fadeIn">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-playfair text-lg font-bold text-slate-800">
-                    Foto Galeri ({data.gallery.length} Foto)
+                  <h4 className="font-khmer-koulen text-lg text-amber-900">
+                    រូបថតអនុស្សាវរីយ៍ ({data.gallery.length} សន្លឹក)
                   </h4>
                   <button
                     onClick={() => {
@@ -490,10 +563,10 @@ export default function BuilderPage() {
                         ]
                       }));
                     }}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 text-xs font-semibold hover:bg-rose-100"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-bold hover:bg-amber-100"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Tambah Foto</span>
+                    <span>បន្ថែមរូបថត</span>
                   </button>
                 </div>
 
@@ -521,7 +594,7 @@ export default function BuilderPage() {
                         />
                         <input
                           type="text"
-                          placeholder="Caption Foto"
+                          placeholder="Caption"
                           value={photo.caption || ''}
                           onChange={(e) => {
                             const val = e.target.value;
@@ -531,7 +604,7 @@ export default function BuilderPage() {
                               return { ...prev, gallery: g };
                             });
                           }}
-                          className="w-full px-2 py-1 rounded border border-slate-200 text-[11px] bg-white"
+                          className="w-full px-2 py-1 rounded border border-slate-200 text-[11px] bg-white font-khmer"
                         />
                       </div>
                       <button
@@ -554,14 +627,14 @@ export default function BuilderPage() {
             {/* 5. GIFTS TAB */}
             {activeTab === 'gifts' && (
               <div className="space-y-4 animate-fadeIn">
-                <h4 className="font-playfair text-lg font-bold text-slate-800">
-                  Amplop Digital & Rekening Bank
+                <h4 className="font-khmer-koulen text-lg text-amber-900">
+                  ចំណងដៃ KHQR & គណនីធនាគារ (Cambodian KHQR)
                 </h4>
                 {data.gifts.map((gift, idx) => (
                   <div key={gift.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Bank / Penyedia</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ធនាគារ (Bank Name)</label>
                         <input
                           type="text"
                           value={gift.providerName}
@@ -577,7 +650,7 @@ export default function BuilderPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Nomor Rekening / Alamat</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">លេខគណនី (Account No)</label>
                         <input
                           type="text"
                           value={gift.accountNumber}
@@ -589,11 +662,11 @@ export default function BuilderPage() {
                               return { ...prev, gifts: g };
                             });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-mono"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-slate-500 mb-1">Atas Nama (A.N.)</label>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">ឈ្មោះម្ចាស់គណនី</label>
                         <input
                           type="text"
                           value={gift.accountHolder}
@@ -605,7 +678,7 @@ export default function BuilderPage() {
                               return { ...prev, gifts: g };
                             });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
+                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white font-bold"
                         />
                       </div>
                     </div>
@@ -618,8 +691,8 @@ export default function BuilderPage() {
             {activeTab === 'theme' && (
               <div className="space-y-6 animate-fadeIn">
                 <div>
-                  <h4 className="font-playfair text-lg font-bold text-slate-800 mb-3">
-                    Pilih Palet Tema Warna
+                  <h4 className="font-khmer-koulen text-lg text-amber-900 mb-3">
+                    ជ្រើសរើសម៉ូតសំបុត្រការខ្មែរ (Khmer Wedding Themes)
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {(Object.keys(THEME_CONFIGS) as WeddingTheme[]).map((themeKey) => {
@@ -631,17 +704,17 @@ export default function BuilderPage() {
                           onClick={() => updateTheme(themeKey)}
                           className={`p-3.5 rounded-2xl border text-left flex items-center justify-between transition-all ${
                             isSelected
-                              ? 'border-rose-600 bg-rose-50/70 shadow-xs'
+                              ? 'border-amber-600 bg-amber-50 shadow-xs'
                               : 'border-slate-200 hover:border-slate-300 bg-white'
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-xs text-slate-900 block">{cfg.name}</span>
-                            <span className="text-[10px] text-slate-400 capitalize">{themeKey}</span>
+                            <span className="font-bold text-xs text-slate-900 block font-khmer">{cfg.nameKhmer}</span>
+                            <span className="text-[10px] text-slate-400 capitalize">{cfg.name}</span>
                           </div>
                           {isSelected && (
-                            <div className="w-5 h-5 rounded-full bg-rose-700 text-white flex items-center justify-center">
-                              <Check className="w-3 h-3" />
+                            <div className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center font-bold text-xs">
+                              ✓
                             </div>
                           )}
                         </button>
@@ -651,12 +724,12 @@ export default function BuilderPage() {
                 </div>
 
                 <div className="pt-4 border-t border-slate-100">
-                  <h4 className="font-playfair text-lg font-bold text-slate-800 mb-3">
-                    Audio & Musik Latar Belakang
+                  <h4 className="font-khmer-koulen text-lg text-amber-900 mb-3">
+                    ភ្លេងការខ្មែរប្រពៃណី (Wedding Audio Soundtrack)
                   </h4>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Judul Lagu</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">ចំណងជើងបទភ្លេង</label>
                       <input
                         type="text"
                         value={data.soundtrack.title}
@@ -667,11 +740,11 @@ export default function BuilderPage() {
                             soundtrack: { ...prev.soundtrack, title: val }
                           }));
                         }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white"
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-khmer"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Penyanyi / Artist</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">អ្នកច្រៀង / ភ្លេងការ</label>
                       <input
                         type="text"
                         value={data.soundtrack.artist}
@@ -682,11 +755,11 @@ export default function BuilderPage() {
                             soundtrack: { ...prev.soundtrack, artist: val }
                           }));
                         }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white"
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-khmer"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">URL Audio MP3 (Direct link)</label>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">តំណភ្ជាប់ឯកសារ MP3 (Direct Audio URL)</label>
                       <input
                         type="text"
                         value={data.soundtrack.audioUrl}
@@ -697,7 +770,7 @@ export default function BuilderPage() {
                             soundtrack: { ...prev.soundtrack, audioUrl: val }
                           }));
                         }}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white"
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white font-mono"
                       />
                     </div>
                   </div>
@@ -710,21 +783,20 @@ export default function BuilderPage() {
         {/* RIGHT PANE: Live Interactive Preview Frame */}
         <div className="lg:col-span-6 flex flex-col items-center justify-center">
           <div className="w-full flex items-center justify-between mb-3 px-2">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Pratinjau Langsung
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              ទិដ្ឋភាពជាក់ស្តែង (Live Preview)
             </span>
             <a
               href={`/invite/${data.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 hover:underline"
+              className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 hover:underline"
             >
-              <span>Buka Tab Baru</span>
+              <span>បើកផ្ទាំងថ្មី (Open Tab)</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
 
-          {/* Smartphone mockup frame */}
           <div
             className={`w-full transition-all duration-300 ${
               previewDevice === 'mobile'
@@ -732,19 +804,18 @@ export default function BuilderPage() {
                 : 'max-w-full rounded-2xl border border-slate-200 shadow-xl overflow-hidden bg-white'
             }`}
           >
-            {/* Phone speaker notch if mobile */}
             {previewDevice === 'mobile' && (
               <div className="bg-slate-900 h-6 w-full flex items-center justify-center">
                 <div className="w-20 h-3.5 bg-slate-950 rounded-full" />
               </div>
             )}
 
-            {/* Scrollable preview container */}
             <div className="h-[740px] overflow-y-auto scrollbar-thin relative bg-white">
               {isClient && (
                 <WeddingInvitationView
                   data={data}
-                  guestName="Tamu Undangan (Preview)"
+                  guestName="ភ្ញៀវកិត្តិយស (Preview)"
+                  allowThemeSwitching={true}
                 />
               )}
             </div>

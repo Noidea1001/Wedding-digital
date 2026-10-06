@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Koulen&family=Moul&family=Siemreap&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -20,6 +21,25 @@
 
 .font-sans-app {
   font-family: var(--font-sans), sans-serif;
+}
+
+/* Khmer Fonts */
+.font-khmer-moul {
+  font-family: 'Moul', cursive;
+  letter-spacing: 0.02em;
+}
+
+.font-khmer-koulen {
+  font-family: 'Koulen', cursive;
+  letter-spacing: 0.04em;
+}
+
+.font-khmer {
+  font-family: 'Kantumruy Pro', var(--font-sans), sans-serif;
+}
+
+.font-khmer-classic {
+  font-family: 'Battambang', cursive;
 }
 
 /* Custom wedding animations & aesthetics */
@@ -64,15 +84,22 @@
   animation: pulseSoft 2.5s ease-in-out infinite;
 }
 
+/* Khmer traditional motif backgrounds */
+.bg-khmer-pattern {
+  background-image: radial-gradient(rgba(212, 175, 55, 0.15) 1px, transparent 1px), radial-gradient(rgba(212, 175, 55, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
 /* Glassmorphism helpers */
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 .glass-card-dark {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }

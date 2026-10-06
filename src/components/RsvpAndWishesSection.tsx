@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Send, CheckCircle2, MessageSquare, Users, HeartHandshake, UserCheck, UserX } from 'lucide-react';
+import { Send, CheckCircle2, MessageSquare, HeartHandshake, UserCheck, UserX } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { WishMessage } from '@/types/wedding';
 import { ThemeConfig } from '@/lib/themes';
@@ -11,7 +11,7 @@ interface RsvpAndWishesSectionProps {
   weddingSlug: string;
   initialWishes: WishMessage[];
   defaultGuestName?: string;
-  rsvpDeadline?: string;
+  rsvpDeadlineKhmer?: string;
   themeConfig: ThemeConfig;
 }
 
@@ -19,7 +19,7 @@ export default function RsvpAndWishesSection({
   weddingSlug,
   initialWishes,
   defaultGuestName = '',
-  rsvpDeadline,
+  rsvpDeadlineKhmer,
   themeConfig
 }: RsvpAndWishesSectionProps) {
   const [wishesList, setWishesList] = useState<WishMessage[]>(initialWishes || []);
@@ -49,13 +49,12 @@ export default function RsvpAndWishesSection({
       setIsSubmitted(true);
       setMessage('');
 
-      // Confetti feedback
       try {
         confetti({
-          particleCount: 50,
-          spread: 60,
+          particleCount: 60,
+          spread: 70,
           origin: { y: 0.8 },
-          colors: ['#E08D9D', '#D4AF37', '#8F9779']
+          colors: ['#D4AF37', '#B8860B', '#E2849D', '#FFFFFF']
         });
       } catch (err) {
         console.warn(err);
@@ -64,26 +63,26 @@ export default function RsvpAndWishesSection({
   };
 
   return (
-    <section id="rsvp" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12">
-      <div className="text-center mb-12">
-        <span className="text-xs font-semibold tracking-[0.25em] text-rose-700 uppercase block mb-2">
-          Konfirmasi & Doa
-        </span>
-        <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-slate-800">
-          RSVP & Buku Tamu
+    <section id="rsvp" className="py-16 sm:py-24 px-4 max-w-4xl mx-auto scroll-mt-12 font-khmer">
+      <div className="text-center mb-14">
+        <h2 className="font-khmer-moul text-xl sm:text-2xl text-amber-900 mb-2">
+          បញ្ជាក់វត្តមាន & សៀវភៅជូនពរ
         </h2>
+        <span className="text-xs uppercase tracking-[0.25em] font-semibold text-slate-400 block mb-3">
+          RSVP & Guestbook
+        </span>
         <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-          Mohon konfirmasi kehadiran Anda demi kelancaran jamuan kami
-          {rsvpDeadline && ` sebelum ${rsvpDeadline}`}.
+          សូមមេត្តាបញ្ជាក់វត្តមានរបស់លោកអ្នក
+          {rsvpDeadlineKhmer && ` មុនថ្ងៃទី ${rsvpDeadlineKhmer}`} ដើម្បីភាពងាយស្រួលក្នុងការរៀបចំទទួលបដិសណ្ឋារកិច្ច។
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* RSVP Form Card */}
-        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-slate-200/80 shadow-md`}>
-          <div className="flex items-center gap-2 mb-6 text-rose-800 font-semibold text-base">
-            <HeartHandshake className="w-5 h-5 text-rose-600" />
-            <span>Kirim Konfirmasi & Ucapan</span>
+        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-amber-200/90 shadow-md`}>
+          <div className="flex items-center gap-2 mb-6 text-amber-950 font-bold text-base">
+            <HeartHandshake className="w-5 h-5 text-amber-600" />
+            <span className="font-khmer-koulen text-lg tracking-wide">ផ្ញើការបញ្ជាក់វត្តមាន & ពរជ័យ</span>
           </div>
 
           {isSubmitted ? (
@@ -91,63 +90,65 @@ export default function RsvpAndWishesSection({
               <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-emerald-900 text-lg">Terima Kasih Banyak!</h4>
-              <p className="text-xs text-emerald-700 leading-relaxed">
-                Konfirmasi kehadiran dan untaian doa Anda telah berhasil kami terima.
+              <h4 className="font-bold text-emerald-950 text-base font-khmer-koulen tracking-wide">
+                សូមថ្លែងអំណរគុណយ៉ាងជ្រាលជ្រៅ!
+              </h4>
+              <p className="text-xs text-emerald-800 leading-relaxed">
+                ការបញ្ជាក់វត្តមាន និងពាក្យជូនពរដ៏មានអត្ថន័យរបស់លោកអ្នកត្រូវបានកត់ត្រារួចរាល់ហើយ។
               </p>
               <button
                 onClick={() => setIsSubmitted(false)}
-                className="mt-2 text-xs font-semibold text-emerald-800 underline hover:text-emerald-950"
+                className="mt-2 text-xs font-bold text-emerald-900 underline hover:text-emerald-950"
               >
-                Kirim pesan lainnya
+                ផ្ញើសារជូនពរបន្ថែម
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
               {/* Name */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">
-                  Nama Anda *
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  ឈ្មោះរបស់លោកអ្នក (Your Name) *
                 </label>
                 <input
                   type="text"
                   required
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="Contoh: Budi Santoso & Partner"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-200/50 outline-none text-sm transition-all bg-white"
+                  placeholder="ឧទាហរណ៍៖ ឯកឧត្តម សុខ ចាន់ថន ឬ លោក ហេង ពិសិដ្ឋ"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white font-khmer"
                 />
               </div>
 
               {/* Attendance Selection */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">
-                  Konfirmasi Kehadiran *
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  ការបញ្ជាក់វត្តមាន (RSVP Status) *
                 </label>
                 <div className="grid grid-cols-2 gap-2.5">
                   <button
                     type="button"
                     onClick={() => setAttendance('attending')}
-                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all border ${
+                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
                       attendance === 'attending'
-                        ? 'bg-rose-700 text-white border-rose-700 shadow-sm'
+                        ? 'bg-amber-700 text-white border-amber-700 shadow-xs'
                         : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <UserCheck className="w-4 h-4" />
-                    <span>Hadir</span>
+                    <span>ចូលរួម (Attending)</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setAttendance('declined')}
-                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all border ${
+                    className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
                       attendance === 'declined'
-                        ? 'bg-slate-800 text-white border-slate-800 shadow-sm'
+                        ? 'bg-slate-800 text-white border-slate-800 shadow-xs'
                         : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <UserX className="w-4 h-4" />
-                    <span>Berhalangan</span>
+                    <span>អវត្តមាន (Decline)</span>
                   </button>
                 </div>
               </div>
@@ -155,22 +156,22 @@ export default function RsvpAndWishesSection({
               {/* Number of Pax if attending */}
               {attendance === 'attending' && (
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">
-                    Jumlah Tamu (Pax)
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    ចំនួនភ្ញៀវចូលរួម (Number of Pax)
                   </label>
                   <div className="flex gap-2">
-                    {[1, 2, 3, 4].map((num) => (
+                    {[1, 2, 3, 4, 5].map((num) => (
                       <button
                         key={num}
                         type="button"
                         onClick={() => setPax(num)}
                         className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${
                           pax === num
-                            ? 'bg-rose-100 border-rose-400 text-rose-900'
+                            ? 'bg-amber-100 border-amber-400 text-amber-950 font-bold'
                             : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        {num} Orang
+                        {num} នាក់
                       </button>
                     ))}
                   </div>
@@ -179,16 +180,16 @@ export default function RsvpAndWishesSection({
 
               {/* Message */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">
-                  Ucapan & Doa Restu *
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  ពាក្យជូនពរសិរីមង្គល (Blessing Message) *
                 </label>
                 <textarea
                   required
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tuliskan ucapan selamat dan doa terbaik untuk kedua mempelai..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-200/50 outline-none text-sm transition-all bg-white resize-none"
+                  placeholder="សូមសរសេរពាក្យជូនពរជ័យសិរីមង្គលដល់គូស្វាមីភរិយាថ្មី..."
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none text-xs sm:text-sm transition-all bg-white resize-none font-khmer"
                 />
               </div>
 
@@ -196,46 +197,45 @@ export default function RsvpAndWishesSection({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-white font-medium text-sm shadow-md shadow-rose-900/15 hover:shadow-lg transition-all disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-900/15 hover:shadow-lg transition-all disabled:opacity-50"
               >
                 <Send className="w-4 h-4" />
-                <span>{isSubmitting ? 'Mengirim...' : 'Kirim RSVP & Ucapan'}</span>
+                <span>{isSubmitting ? 'កំពុងផ្ញើ...' : 'ផ្ញើការបញ្ជាក់វត្តមាន & ពរជ័យ'}</span>
               </button>
             </form>
           )}
         </div>
 
         {/* Wishes Feed */}
-        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-slate-200/80 shadow-md flex flex-col h-[520px]`}>
+        <div className={`lg:col-span-6 p-6 sm:p-8 rounded-3xl ${themeConfig.cardBg} border border-amber-200/90 shadow-md flex flex-col h-[540px]`}>
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2 text-rose-800 font-semibold text-base">
-              <MessageSquare className="w-5 h-5 text-rose-600" />
-              <span>Buku Doa Tamu</span>
+            <div className="flex items-center gap-2 text-amber-900 font-bold text-base">
+              <MessageSquare className="w-5 h-5 text-amber-600" />
+              <span className="font-khmer-koulen text-lg tracking-wide">សៀវភៅពរជ័យមង្គល</span>
             </div>
-            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-rose-100 text-rose-800">
-              {wishesList.length} Doa
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-950 font-khmer">
+              {wishesList.length} ពរជ័យ
             </span>
           </div>
 
-          {/* Scrollable wishes */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 mt-4 scrollbar-thin">
             {wishesList.length === 0 ? (
-              <div className="text-center py-12 text-slate-400 text-sm">
-                Belum ada ucapan. Jadilah yang pertama memberikan doa restu!
+              <div className="text-center py-12 text-slate-400 text-xs sm:text-sm">
+                មិនទាន់មានពាក្យជូនពរនៅឡើយទេ។ សូមក្លាយជាអ្នកដំបូងដែលផ្តល់ពរជ័យ!
               </div>
             ) : (
               wishesList.map((wish) => (
                 <div
                   key={wish.id}
-                  className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/70 text-left transition-all hover:bg-slate-50"
+                  className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/60 text-left transition-all hover:bg-amber-50/80"
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-rose-200/80 text-rose-900 font-bold text-xs flex items-center justify-center">
-                        {wish.guestName.charAt(0).toUpperCase()}
+                      <div className="w-8 h-8 rounded-full bg-amber-200 text-amber-950 font-bold text-xs flex items-center justify-center">
+                        {wish.guestName.charAt(0)}
                       </div>
                       <div>
-                        <h5 className="font-bold text-slate-800 text-xs sm:text-sm">
+                        <h5 className="font-bold text-slate-900 text-xs sm:text-sm">
                           {wish.guestName}
                         </h5>
                         <span className="text-[10px] text-slate-400">{wish.createdAt}</span>
@@ -243,17 +243,17 @@ export default function RsvpAndWishesSection({
                     </div>
 
                     <span
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         wish.attendance === 'attending'
                           ? 'bg-emerald-100 text-emerald-800'
                           : 'bg-slate-200 text-slate-700'
                       }`}
                     >
-                      {wish.attendance === 'attending' ? `Hadir (${wish.pax || 1} Pax)` : 'Berhalangan'}
+                      {wish.attendance === 'attending' ? `ចូលរួម (${wish.pax || 1} នាក់)` : 'អវត្តមាន'}
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-sans mt-1">
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-khmer mt-1">
                     {wish.message}
                   </p>
                 </div>
